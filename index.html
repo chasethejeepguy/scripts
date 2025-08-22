@@ -1023,6 +1023,16 @@
 
   </style>
 
+  <script>
+    // Early global fallbacks to prevent onclick ReferenceError before main script loads
+    window.showSection = window.showSection || function(){};
+    window.showSalesSubsection = window.showSalesSubsection || function(){};
+    window.showNewSubsection = window.showNewSubsection || function(){};
+    window.showPreownedSubsection = window.showPreownedSubsection || function(){};
+    window.showTradeInOption = window.showTradeInOption || function(){};
+    window.showPreownedTradeInOption = window.showPreownedTradeInOption || function(){};
+  </script>
+
 </head>
 
 <body>
@@ -1189,11 +1199,11 @@
 
       <div class="buttons">
 
-        <button onclick="showSection('sales')">Sales</button>
+        <button id="btn-sales">Sales</button>
 
-        <button onclick="showSection('service')">Service</button>
+        <button id="btn-service">Service</button>
 
-        <button onclick="alert('Redirecting to Parts script...')">Parts</button>
+        <button id="btn-parts">Parts</button>
 
       </div>
 
@@ -2984,6 +2994,18 @@
     // Clear localStorage and reset serviceData on page load
 
     document.addEventListener("DOMContentLoaded", function () {
+
+      const btnSales = document.getElementById('btn-sales');
+
+      const btnService = document.getElementById('btn-service');
+
+      const btnParts = document.getElementById('btn-parts');
+
+      if (btnSales) btnSales.addEventListener('click', () => window.showSection && window.showSection('sales'));
+
+      if (btnService) btnService.addEventListener('click', () => window.showSection && window.showSection('service'));
+
+      if (btnParts) btnParts.addEventListener('click', () => alert('Redirecting to Parts script...'));
 
       localStorage.removeItem('serviceData'); // Clear stored data
 
