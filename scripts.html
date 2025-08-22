@@ -1,0 +1,4949 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Hutchinson Auto Group BDC Inbound Call Scripts</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+
+  <style>
+
+    body {
+
+      font-family: 'Inter', Arial, sans-serif;
+
+      background: #f4f6f8;
+
+      margin: 0;
+
+      padding: 20px 20px 20px 20px; /* Add top padding to account for fixed nav */
+
+      color: #2c3e50;
+
+      display: flex;
+
+      justify-content: center;
+
+      position: relative;
+
+    }
+
+    .script-nav {
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100%;
+
+      display: flex;
+
+      background: #f4f6f8;
+
+      z-index: 1001; /* Above objection buttons (1000) */
+
+      padding: 10px 20px;
+
+      box-sizing: border-box;
+
+    }
+
+    .script-nav a {
+
+      flex: 1;
+
+      padding: 14px 0;
+
+      text-align: center;
+
+      text-decoration: none;
+
+      font-size: 16px;
+
+      font-weight: 600;
+
+      border-radius: 8px;
+
+      transition: all 0.3s ease;
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+      margin: 0 4px;
+
+    }
+
+    .script-nav .inbound {
+
+      background: #e74c3c;
+
+      color: #ffffff;
+
+    }
+
+    .script-nav .inbound:hover {
+
+      background: #c0392b;
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    }
+
+    .script-nav .outbound {
+
+      background: #bdc3c7;
+
+      color: #2c3e50;
+
+    }
+
+    .script-nav .outbound:hover {
+
+      background: #a1a7ad;
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    }
+
+    .objection-buttons {
+
+      position: fixed;
+
+      left: 20px;
+
+      top: 70px; /* Adjusted to account for nav height */
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+      z-index: 1000;
+
+    }
+
+    .objection-buttons button {
+
+      padding: 10px 20px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: linear-gradient(135deg, #e67e22, #d35400);
+
+      color: #ffffff;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+      text-align: left;
+
+      width: 200px;
+
+    }
+
+    .objection-buttons button:hover {
+
+      background: linear-gradient(135deg, #d35400, #b84500);
+
+      transform: translateY(-1px);
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    }
+
+    .objection-buttons button:active {
+
+      transform: translateY(0);
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    }
+
+    .container {
+
+      max-width: 800px;
+
+      background: #ffffff;
+
+      border-radius: 12px;
+
+      padding: 24px;
+
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+
+      margin-left: 240px;
+
+      margin-top: 60px; /* Adjusted to account for nav height */
+
+    }
+
+    h1, h2 {
+
+      color: #1a3552;
+
+      margin-bottom: 16px;
+
+    }
+
+    .script-box {
+
+      margin-bottom: 24px;
+
+    }
+
+    .buttons {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 12px;
+
+    }
+
+    .buttons button {
+
+      padding: 12px 24px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: linear-gradient(135deg, #3498db, #2980b9);
+
+      color: #ffffff;
+
+      font-size: 16px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    }
+
+    .buttons button:hover {
+
+      background: linear-gradient(135deg, #2980b9, #1f6391);
+
+      transform: translateY(-1px);
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    }
+
+    .buttons button:active {
+
+      transform: translateY(0);
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    }
+
+    .section {
+
+      display: none;
+
+    }
+
+    select, input[type="text"], input[type="tel"], input[type="email"], input[type="datetime-local"] {
+
+      padding: 12px;
+
+      margin: 8px 0;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 8px;
+
+      font-size: 16px;
+
+      background-color: #f9fafb;
+
+      color: #2c3e50;
+
+      width: 100%;
+
+      max-width: 300px;
+
+      box-sizing: border-box;
+
+      transition: border-color 0.2s ease;
+
+    }
+
+    select:focus, input:focus {
+
+      border-color: #3498db;
+
+      outline: none;
+
+      background-color: #ffffff;
+
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+
+    }
+
+    .input-group {
+
+      margin-bottom: 16px;
+
+      position: relative;
+
+    }
+
+    label {
+
+      display: block;
+
+      font-weight: 500;
+
+      margin-bottom: 8px;
+
+      color: #2c3e50;
+
+    }
+
+    .loading-indicator {
+
+      display: none;
+
+      font-size: 12px;
+
+      color: #3498db;
+
+      margin-top: 4px;
+
+    }
+
+    .error-message {
+
+      display: none;
+
+      font-size: 12px;
+
+      color: #e74c3c;
+
+      margin-top: 4px;
+
+    }
+
+    .view-vehicle-info {
+
+      display: none;
+
+      padding: 12px 24px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+
+      color: #ffffff;
+
+      font-size: 16px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+      margin-top: 16px;
+
+    }
+
+    .view-vehicle-info:hover {
+
+      background: linear-gradient(135deg, #27ae60, #219653);
+
+      transform: translateY(-1px);
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    }
+
+    .view-vehicle-info:active {
+
+      transform: translateY(0);
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    }
+
+    .popup {
+
+      display: none;
+
+      position: fixed;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+
+      background: #ffffff;
+
+      padding: 24px;
+
+      border-radius: 12px;
+
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+
+      max-width: 600px;
+
+      width: 90%;
+
+      z-index: 1002; /* Above script-nav */
+
+      max-height: 80vh;
+
+      overflow-y: auto;
+
+    }
+
+    .vehicle-popup {
+
+      display: none;
+
+      position: fixed;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+
+      background: #ffffff;
+
+      padding: 32px;
+
+      border-radius: 16px;
+
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+
+      max-width: 900px;
+
+      width: 95%;
+
+      z-index: 1002; /* Above script-nav */
+
+      max-height: 90vh;
+
+      overflow-y: auto;
+
+      animation: fadeIn 0.3s ease-in-out;
+
+    }
+
+    @keyframes fadeIn {
+
+      from { opacity: 0; transform: translate(-50%, -60%); }
+
+      to { opacity: 1; transform: translate(-50%, -50%); }
+
+    }
+
+    .vehicle-popup-content {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 24px;
+
+    }
+
+    .vehicle-actions {
+
+      display: flex;
+
+      gap: 16px;
+
+      justify-content: center;
+
+    }
+
+    .vehicle-action-button {
+
+      padding: 12px 24px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      font-size: 16px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+      flex: 1;
+
+      text-align: center;
+
+      color: #ffffff;
+
+    }
+
+    .vehicle-action-button.carfax, .vehicle-action-button.window-sticker {
+
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+
+    }
+
+    .vehicle-action-button.carfax:hover, .vehicle-action-button.window-sticker:hover {
+
+      background: linear-gradient(135deg, #c0392b, #a93226);
+
+    }
+
+    .vehicle-action-button.online {
+
+      background: linear-gradient(135deg, #3498db, #2980b9);
+
+    }
+
+    .vehicle-action-button.online:hover {
+
+      background: linear-gradient(135deg, #2980b9, #1f6391);
+
+    }
+
+    .vehicle-gallery {
+
+      position: relative;
+
+      width: 100%;
+
+      max-height: 400px;
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+    }
+
+    .swiper-container {
+
+      width: 100%;
+
+      height: 100%;
+
+    }
+
+    .swiper-slide img {
+
+      width: 100%;
+
+      height: 400px;
+
+      object-fit: cover;
+
+      border-radius: 12px;
+
+    }
+
+    .swiper-button-prev, .swiper-button-next {
+
+      color: #ffffff;
+
+      background: rgba(0,0,0,0.5);
+
+      border-radius: 50%;
+
+      width: 40px;
+
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+    .swiper-button-prev:after, .swiper-button-next:after {
+
+      font-size: 20px;
+
+    }
+
+    .swiper-pagination-bullet {
+
+      background: #ffffff;
+
+      opacity: 0.5;
+
+    }
+
+    .swiper-pagination-bullet-active {
+
+      background: #3498db;
+
+      opacity: 1;
+
+    }
+
+    .vehicle-details-grid {
+
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 16px;
+
+      padding: 16px;
+
+      background: #f9fafb;
+
+      border-radius: 8px;
+
+    }
+
+    .vehicle-detail {
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+    }
+
+    .vehicle-detail strong {
+
+      color: #1a3552;
+
+      font-weight: 600;
+
+    }
+
+    .vehicle-description {
+
+      padding: 16px;
+
+      background: #ffffff;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 8px;
+
+      margin-top: 16px;
+
+    }
+
+    .vehicle-description h3 {
+
+      margin: 0 0 12px;
+
+      font-size: 18px;
+
+      color: #1a3552;
+
+      border-bottom: 2px solid #3498db;
+
+      padding-bottom: 8px;
+
+    }
+
+    .vehicle-description p {
+
+      margin: 0;
+
+      font-size: 14px;
+
+      line-height: 1.6;
+
+      color: #2c3e50;
+
+    }
+
+    .vehicle-popup-close {
+
+      position: absolute;
+
+      top: 16px;
+
+      right: 16px;
+
+      background: none;
+
+      border: none;
+
+      font-size: 24px;
+
+      color: #e74c3c;
+
+      cursor: pointer;
+
+      transition: color 0.2s ease;
+
+    }
+
+    .vehicle-popup-close:hover {
+
+      color: #c0392b;
+
+    }
+
+    .objection-popup {
+
+      display: none;
+
+      position: fixed;
+
+      top: 90px; /* Adjusted for nav height */
+
+      left: 240px;
+
+      background: #ffffff;
+
+      padding: 20px;
+
+      border-radius: 8px;
+
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+
+      width: 300px;
+
+      z-index: 1002; /* Above script-nav */
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+      color: #2c3e50;
+
+    }
+
+    .objection-popup-content {
+
+      margin-bottom: 16px;
+
+    }
+
+    .objection-popup button {
+
+      padding: 8px 16px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+
+      color: #ffffff;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+    }
+
+    .objection-popup button:hover {
+
+      background: linear-gradient(135deg, #c0392b, #a93226);
+
+    }
+
+    .popup-content {
+
+      font-size: 16px;
+
+      line-height: 1.6;
+
+      color: #2c3e50;
+
+      margin-bottom: 24px;
+
+    }
+
+    .popup-content h3 {
+
+      margin: 0 0 16px;
+
+      font-size: 20px;
+
+      color: #1a3552;
+
+      border-bottom: 2px solid #3498db;
+
+      padding-bottom: 8px;
+
+    }
+
+    .popup-content p {
+
+      margin: 8px 0;
+
+      display: flex;
+
+      justify-content: space-between;
+
+    }
+
+    .popup-content p strong {
+
+      flex: 1;
+
+      font-weight: 600;
+
+      color: #1a3552;
+
+    }
+
+    .popup-content p span {
+
+      flex: 2;
+
+      text-align: left;
+
+    }
+
+    .popup-buttons {
+
+      display: flex;
+
+      gap: 12px;
+
+      justify-content: flex-end;
+
+    }
+
+    .popup-buttons button {
+
+      padding: 10px 20px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      font-size: 16px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+    }
+
+    .popup-buttons button:first-child {
+
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+
+      color: #ffffff;
+
+    }
+
+    .popup-buttons button:first-child:hover {
+
+      background: linear-gradient(135deg, #27ae60, #219653);
+
+    }
+
+    .popup-buttons button:last-child {
+
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+
+      color: #ffffff;
+
+    }
+
+    .popup-buttons button:last-child:hover {
+
+      background: linear-gradient(135deg, #c0392b, #a93226);
+
+    }
+
+    .overlay {
+
+      display: none;
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100%;
+
+      height: 100%;
+
+      background: rgba(0,0,0,0.6);
+
+      z-index: 999; /* Below script-nav */
+
+      cursor: pointer;
+
+    }
+
+    .closing-text {
+
+      margin-top: 20px;
+
+      padding: 16px;
+
+      background: #f9fafb;
+
+      border-radius: 8px;
+
+      font-style: italic;
+
+      color: #34495e;
+
+    }
+
+    @media (max-width: 768px) {
+
+      .script-nav {
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        padding: 10px;
+
+      }
+
+      .script-nav a {
+
+        margin: 0;
+
+      }
+
+      .objection-buttons {
+
+        top: 110px; /* Adjusted for stacked nav */
+
+      }
+
+      .container {
+
+        margin-top: 120px; /* Adjusted for stacked nav */
+
+      }
+
+      .objection-popup {
+
+        top: 130px; /* Adjusted for stacked nav */
+
+      }
+
+      .vehicle-details-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+      }
+
+      .vehicle-popup {
+
+        width: 90%;
+
+        padding: 24px;
+
+      }
+
+      .swiper-slide img {
+
+        height: 300px;
+
+      }
+
+      .vehicle-action-button {
+
+        font-size: 14px;
+
+        padding: 10px 16px;
+
+      }
+
+    }
+
+    @media (max-width: 480px) {
+
+      .vehicle-details-grid {
+
+        grid-template-columns: 1fr;
+
+      }
+
+      .container {
+
+        margin-left: 0;
+
+        padding: 16px;
+
+      }
+
+      .objection-buttons {
+
+        left: 10px;
+
+        width: 180px;
+
+      }
+
+      .vehicle-actions {
+
+        flex-direction: column;
+
+        gap: 12px;
+
+      }
+
+      .vehicle-action-button {
+
+        width: 100%;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="script-nav">
+
+  <a href="/scripts/inbound/index.html" class="inbound">Inbound Scripts</a>
+
+  <a href="/scripts/outbound/index.html" class="outbound">Outbound Scripts</a>
+
+</div>
+
+  <div class="objection-buttons">
+
+    <button onclick="showObjectionPopup('best-price-1')">Best Price 1</button>
+
+    <button onclick="showObjectionPopup('best-price-2')">Best Price 2</button>
+
+    <button onclick="showObjectionPopup('trade-value-1')">Trade Value 1</button>
+
+    <button onclick="showObjectionPopup('trade-value-2')">Trade Value 2</button>
+
+    <button onclick="showObjectionPopup('trade-value-3')">Trade Value 3</button>
+
+    <button onclick="showObjectionPopup('whats-my-rate')">What's My Rate - SWAT</button>
+
+    <button onclick="showObjectionPopup('wont-come-in-1')">Won't Come In Unless Match or Beat</button>
+
+    <button onclick="showObjectionPopup('wont-come-in-2')">Won't Come In 2</button>
+
+  </div>
+
+  <div class="objection-popup" id="best-price-1">
+
+    <div class="objection-popup-content">
+
+      You are asking the right question, however I would also encourage you to consider that you have 3 variables to consider: The Price you pay for the car, the Value you get from the store, and the overall Deal you are getting. When you are here, I will go over the exact price, the added value we offer you so you can see the total deal you get! Are you able to see it as early as today, or does tomorrow work better?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('best-price-1')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="best-price-2">
+
+    <div class="objection-popup-content">
+
+      This vehicle's price is lower than others in the market because we want to reach customers far beyond middle Georgia. Our advertised price is already competitive, any different agreed upon price would be available and determined by you and management when you are here. Are you able to see it as early as today, or does tomorrow work better?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('best-price-2')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="trade-value-1">
+
+    <div class="objection-popup-content">
+
+      When it comes to a value for your trade? We believe it's important to offer clients accurate values, so we recommend appraising it on 3 different online guides: KBB, NADA, and Edmunds to get our clients an estimated Average Market Value. While some clients prefer to get our internal Actual Cash Value which is what we would write you a check for when you are here. Are you able to bring your vehicle in for our preowned director to see it as early as today, or does tomorrow work better?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('trade-value-1')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="trade-value-2">
+
+    <div class="objection-popup-content">
+
+      I understand you are looking for a value for your trade in and I would also encourage you to consider that you have 3 variables to consider: The Price you pay for the car, the value you get for yours, and the overall Deal you are getting. When you are here, I will go over the exact price, and the value we will offer you so you can see the total deal you get! Are you able to bring your vehicle in for our preowned director to see it as early as today, or does tomorrow work better?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('trade-value-2')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="trade-value-3">
+
+    <div class="objection-popup-content">
+
+      I can help you with your value in a few ways. In fact, depending on your vehicle's condition, I may already have an interested party for it. While you are here, I can offer you an Allowance based on your trade-in, the Actual Cash Value of what we would write a check for, and I will see who I know that is already interested. Are you able to bring your vehicle in for our preowned director to see it as early as today, or does tomorrow work better?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('trade-value-3')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="whats-my-rate">
+
+    <div class="objection-popup-content">
+
+      All of our rates are based on 4 factors other than your credit score. Our lenders look at 4 factors, we call SWAT: Stability, Willingness, Ability and Track record. We also use your previous lender AND our lenders to compete with each other to secure you a competitive loan AND we pass on the best possible fit to you. Are you able to stop by as early as today, or does tomorrow work better?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('whats-my-rate')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="wont-come-in-1">
+
+    <div class="objection-popup-content">
+
+      There are only a few possibilities based on your goals, either we both win or we both lose - You come in I can help you set a great deal, rather you not come in and we can't move any further. We won't lose your business over price, but if you come in and do not agree with our best price, we will send you home in a clean and refueled vehicle, fair enough?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('wont-come-in-1')">Close</button>
+
+  </div>
+
+  <div class="objection-popup" id="wont-come-in-2">
+
+    <div class="objection-popup-content">
+
+      I wanted to let you know that I'd like to offer you a guarantee that removes all your risk and makes you feel completely confident that you won't regret coming in to see me. I can assure you that you will be glad you give me a chance. I'm asking for 3% of your trust now, and I'll earn the other 97% later, fair enough?
+
+    </div>
+
+    <button onclick="closeObjectionPopup('wont-come-in-2')">Close</button>
+
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closeVehiclePopup(); closePopup();"></div>
+
+  <div class="popup" id="notePopup">
+
+    <div class="popup-content" id="noteContent"></div>
+
+    <div class="popup-buttons">
+
+      <button onclick="copyNote()">Copy Note</button>
+
+      <button onclick="closePopup()">Close</button>
+
+    </div>
+
+  </div>
+
+  <div class="vehicle-popup" id="vehiclePopup">
+
+    <button class="vehicle-popup-close" onclick="closeVehiclePopup()">×</button>
+
+    <div class="vehicle-popup-content" id="vehiclePopupContent"></div>
+
+  </div>
+
+  <div class="container">
+
+    <h1>Hutchinson Auto Group BDC Inbound Call Scripts</h1>
+
+
+
+    <div id="intro" class="script-box">
+
+      <h2>Intro</h2>
+
+      <p>It's a great day at Hutchinson Auto Group,<br>
+
+      To be respectful of your time, are you looking for Sales, Service or Parts?</p>
+
+      <div class="buttons">
+
+        <button onclick="showSection('sales')">Sales</button>
+
+        <button onclick="showSection('service')">Service</button>
+
+        <button onclick="alert('Redirecting to Parts script...')">Parts</button>
+
+      </div>
+
+    </div>
+
+	<div id="sales" class="section script-box">
+
+      <h2>Sales Department</h2>
+
+      <p>Great, to make sure you're with the correct department, are you interested in New, Preowned, or looking to sell your vehicle?</p>
+
+      <div class="buttons">
+
+        <button onclick="showSalesSubsection('new')">New</button>
+
+        <button onclick="showSalesSubsection('preowned')">Preowned</button>
+
+        <button onclick="showSalesSubsection('sell')">Sell My Vehicle</button>
+
+      </div>
+
+
+
+      <div id="new" class="section">
+
+        <h2>New Vehicle Inquiry</h2>
+
+        <p>It sounds like you're looking for availability, pricing, and programs—is that right?</p>
+
+        <p>Perfect, you have the right person and I can help you with that. My name is __________.<br>
+
+        Do you have the stock number of the new vehicle that you're interested in?</p>
+
+        <div class="buttons">
+
+          <button onclick="showNewSubsection('has-stock')">Has Stock Number</button>
+
+          <button onclick="showNewSubsection('no-stock')">No Stock Number</button>
+
+        </div>
+
+
+
+        <div id="has-stock" class="section">
+
+          <h2>Has Stock Number</h2>
+
+          <div class="input-group">
+
+            <label for="new-stock">Stock Number:</label>
+
+            <input type="text" id="new-stock" placeholder="Enter stock number" oninput="lookupStockNumber('new')">
+
+            <span id="new-stock-loading" class="loading-indicator">Looking up stock number...</span>
+
+            <span id="new-stock-error" class="error-message"></span>
+
+          </div>
+
+          <p>One moment while I check on this vehicle...</p>
+
+          <div class="input-group">
+
+            <label for="new-year">Year:</label>
+
+            <select id="new-year" onchange="loadMakes('new')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="new-make">Make:</label>
+
+            <select id="new-make" onchange="loadModels('new')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="new-model">Model:</label>
+
+            <select id="new-model"></select>
+
+          </div>
+
+          <button class="view-vehicle-info" id="new-view-vehicle-info" onclick="showVehicleInfo('new')">View Vehicle Info</button>
+
+          <p>Great news! The <span id="new-selectedVehicle">vehicle</span> is still available!</p>
+
+          <p><strong>What's most important to you in your next vehicle?</strong></p>
+
+          <div class="input-group">
+
+            <label for="new-features">Most Important Features:</label>
+
+            <input type="text" id="new-features" placeholder="Enter important features">
+
+          </div>
+
+          <p><strong>Do you have a vehicle that you would be trading in? (Year, Make, Model)</strong></p>
+
+          <div class="buttons">
+
+            <button onclick="showTradeInOption('has-trade')">Has Trade-In</button>
+
+            <button onclick="showTradeInOption('no-trade')">Does Not Have Trade-In</button>
+
+          </div>
+
+
+
+          <div id="has-trade" class="section">
+
+            <h2>Has Trade-In</h2>
+
+            <p><strong>What is the Year, Make, and Model of your trade-in vehicle?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-year">Year:</label>
+
+              <select id="trade-year" onchange="loadMakes('trade')"></select>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="trade-make">Make:</label>
+
+              <select id="trade-make" onchange="loadModels('trade')"></select>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="trade-model">Model:</label>
+
+              <select id="trade-model"></select>
+
+            </div>
+
+            <p><strong>How many miles are on your <span id="trade-selectedMake">vehicle</span>?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-miles">Miles:</label>
+
+              <input type="text" id="trade-miles" placeholder="Enter miles">
+
+            </div>
+
+            <p><strong>And what is the main reason you are considering replacing the <span id="trade-selectedModel">vehicle</span>?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-reason">Main Reason:</label>
+
+              <input type="text" id="trade-reason" placeholder="Enter main reason">
+
+            </div>
+
+            <p><strong>Also, do you live and work around the area?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-location">Live/Work Location:</label>
+
+              <input type="text" id="trade-location" placeholder="Enter live/work location">
+
+            </div>
+
+            <p><strong>This is a fun question I always like to ask, what do you enjoy doing when you're not car shopping?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-hobbies">Hobbies/Interests:</label>
+
+              <input type="text" id="trade-hobbies" placeholder="Enter hobbies/interests">
+
+            </div>
+
+            <p><strong>I love that, thank you, it's just a fun question I like to ask. Would you like for us to send you a personalized walkaround video of the <span id="new-selectedVehicle2">vehicle</span>?</strong></p>
+
+            <div class="buttons">
+
+              <button onclick="showTradeVideoOption('trade-video-yes')">Yes</button>
+
+              <button onclick="showTradeVideoOption('trade-video-no')">No</button>
+
+            </div>
+
+            <div id="trade-video-yes" class="section">
+
+              <p>Sounds good! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="trade-video-yes-name">Full Name:</label>
+
+                <input type="text" id="trade-video-yes-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <div id="trade-video-no" class="section">
+
+              <p>Not a problem! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="trade-video-no-name">Full Name:</label>
+
+                <input type="text" id="trade-video-no-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <p><strong>And what's a good phone number for you?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-phone">Phone Number:</label>
+
+              <input type="tel" id="trade-phone" placeholder="Enter phone number">
+
+            </div>
+
+            <p id="trade-video-message"></p>
+
+            <div class="input-group">
+
+              <label for="trade-datetime">Date and Time:</label>
+
+              <input type="datetime-local" id="trade-datetime">
+
+            </div>
+
+            <p><strong>Quick question, if you don’t mind me asking, what makes a good salesperson to you personally?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-salesperson">Good Salesperson Qualities:</label>
+
+              <input type="text" id="trade-salesperson" placeholder="Enter qualities">
+
+            </div>
+
+            <p><strong>Thank you so much for sharing that with me. And one more thing, how did you hear about us? Which website were you browsing?</strong></p>
+
+            <div class="input-group">
+
+              <label for="trade-source">Source:</label>
+
+              <input type="text" id="trade-source" placeholder="Enter source or website">
+
+            </div>
+
+            <p id="trade-confirmation"></p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+            <div class="buttons">
+
+              <button onclick="generateNote('trade')">Generate Note</button>
+
+            </div>
+
+          </div>
+
+
+
+          <div id="no-trade" class="section">
+
+            <h2>No Trade-In</h2>
+
+            <p><strong>Also, do you live and work around the area?</strong></p>
+
+            <div class="input-group">
+
+              <label for="no-trade-location">Live/Work Location:</label>
+
+              <input type="text" id="no-trade-location" placeholder="Enter live/work location">
+
+            </div>
+
+            <p><strong>This is a fun question I always like to ask, what do you enjoy doing when you're not car shopping?</strong></p>
+
+            <div class="input-group">
+
+              <label for="no-trade-hobbies">Hobbies/Interests:</label>
+
+              <input type="text" id="no-trade-hobbies" placeholder="Enter hobbies/interests">
+
+            </div>
+
+            <p><strong>I love that, thank you, it's just a fun question I like to ask. Would you like for us to send you a personalized walkaround video of the <span id="new-selectedVehicle4">vehicle</span>?</strong></p>
+
+            <div class="buttons">
+
+              <button onclick="showVideoOption('video-yes')">Yes</button>
+
+              <button onclick="showVideoOption('video-no')">No</button>
+
+            </div>
+
+            <div id="video-yes" class="section">
+
+              <p>Sounds good! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="video-yes-name">Full Name:</label>
+
+                <input type="text" id="video-yes-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <div id="video-no" class="section">
+
+              <p>Not a problem! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="video-no-name">Full Name:</label>
+
+                <input type="text" id="video-no-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <p><strong>And what's a good phone number for you?</strong></p>
+
+            <div class="input-group">
+
+              <label for="no-trade-phone">Phone Number:</label>
+
+              <input type="tel" id="no-trade-phone" placeholder="Enter phone number">
+
+            </div>
+
+            <p id="no-trade-video-message"></p>
+
+            <div class="input-group">
+
+              <label for="no-trade-datetime">Date and Time:</label>
+
+              <input type="datetime-local" id="no-trade-datetime">
+
+            </div>
+
+            <p><strong>Quick question, if you don’t mind me asking, what makes a good salesperson to you personally?</strong></p>
+
+            <div class="input-group">
+
+              <label for="no-trade-salesperson">Good Salesperson Qualities:</label>
+
+              <input type="text" id="no-trade-salesperson" placeholder="Enter qualities">
+
+            </div>
+
+            <p><strong>Thank you so much for sharing that with me. And one more thing, how did you hear about us? Which website were you browsing?</strong></p>
+
+            <div class="input-group">
+
+              <label for="no-trade-source">Source:</label>
+
+              <input type="text" id="no-trade-source" placeholder="Enter source or website">
+
+            </div>
+
+            <p id="no-trade-confirmation"></p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+            <div class="buttons">
+
+              <button onclick="generateNote('no-trade')">Generate Note</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="no-stock" class="section">
+
+          <h2>No Stock Number</h2>
+
+          <p><strong>Not a problem! Let's get some information about the vehicle. What is the year, make, and model?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-year">Year:</label>
+
+            <select id="no-stock-year" onchange="loadMakes('no-stock')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="no-stock-make">Make:</label>
+
+            <select id="no-stock-make" onchange="loadModels('no-stock')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="no-stock-model">Model:</label>
+
+            <select id="no-stock-model"></select>
+
+          </div>
+
+          <p><strong>What is the color of it?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-color">Color:</label>
+
+            <input type="text" id="no-stock-color" placeholder="Enter color">
+
+          </div>
+
+          <p>One moment while I check on this vehicle...</p>
+
+          <p>Great news! The <span id="no-stock-selectedVehicle">vehicle</span> is still available!</p>
+
+          <p><strong>What's most important to you in your next vehicle?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-features">Most Important Features:</label>
+
+            <input type="text" id="no-stock-features" placeholder="Enter important features">
+
+          </div>
+
+          <p><strong>Also, do you live and work around the area?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-location">Live/Work Location:</label>
+
+            <input type="text" id="no-stock-location" placeholder="Enter live/work location">
+
+          </div>
+
+          <p><strong>This is a fun question I always like to ask, what do you enjoy doing when you're not car shopping?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-hobbies">Hobbies/Interests:</label>
+
+            <input type="text" id="no-stock-hobbies" placeholder="Enter hobbies/interests">
+
+          </div>
+
+          <p><strong>I love that, thank you, it's just a fun question I like to ask. Would you like for us to send you a personalized walkaround video of the <span id="no-stock-selectedVehicle2">vehicle</span>?</strong></p>
+
+          <div class="buttons">
+
+            <button onclick="showNoStockVideoOption('no-stock-video-yes')">Yes</button>
+
+            <button onclick="showNoStockVideoOption('no-stock-video-no')">No</button>
+
+          </div>
+
+          <div id="no-stock-video-yes" class="section">
+
+            <p>Sounds good! May I have your first and last name?</p>
+
+            <div class="input-group">
+
+              <label for="no-stock-video-yes-name">Full Name:</label>
+
+              <input type="text" id="no-stock-video-yes-name" placeholder="Enter full name">
+
+            </div>
+
+          </div>
+
+          <div id="no-stock-video-no" class="section">
+
+            <p>Not a problem! May I have your first and last name?</p>
+
+            <div class="input-group">
+
+              <label for="no-stock-video-no-name">Full Name:</label>
+
+              <input type="text" id="no-stock-video-no-name" placeholder="Enter full name">
+
+            </div>
+
+          </div>
+
+          <p><strong>And what's a good phone number for you?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-phone">Phone Number:</label>
+
+            <input type="tel" id="no-stock-phone" placeholder="Enter phone number">
+
+          </div>
+
+          <p id="no-stock-video-message"></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-datetime">Date and Time:</label>
+
+            <input type="datetime-local" id="no-stock-datetime">
+
+          </div>
+
+          <p><strong>Quick question, if you don’t mind me asking, what makes a good salesperson to you personally?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-salesperson">Good Salesperson Qualities:</label>
+
+            <input type="text" id="no-stock-salesperson" placeholder="Enter qualities">
+
+          </div>
+
+          <p><strong>Thank you so much for sharing that with me. And one more thing, how did you hear about us? Which website were you browsing?</strong></p>
+
+          <div class="input-group">
+
+            <label for="no-stock-source">Source:</label>
+
+            <input type="text" id="no-stock-source" placeholder="Enter source or website">
+
+          </div>
+
+          <p id="no-stock-confirmation"></p>
+
+          <div class="closing-text">
+
+            <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+            <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+            <p>Thank you—and I can’t wait to meet you!</p>
+
+          </div>
+
+          <div class="buttons">
+
+            <button onclick="generateNote('no-stock')">Generate Note</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <div id="preowned" class="section">
+
+        <h2>Preowned Vehicle Inquiry</h2>
+
+        <p>It sounds like you're looking for availability, pricing, and condition—is that right?</p>
+
+        <p>Perfect, you have the right person and I can help you with that. My name is __________.<br>
+
+        Do you have the stock number of the preowned vehicle that you're interested in?</p>
+
+        <div class="buttons">
+
+          <button onclick="showPreownedSubsection('preowned-has-stock')">Has Stock Number</button>
+
+          <button onclick="showPreownedSubsection('preowned-no-stock')">No Stock Number</button>
+
+        </div>
+
+
+
+        <div id="preowned-has-stock" class="section">
+
+          <h2>Has Stock Number</h2>
+
+          <div class="input-group">
+
+            <label for="preowned-stock">Stock Number:</label>
+
+            <input type="text" id="preowned-stock" placeholder="Enter stock number" oninput="lookupStockNumber('preowned')">
+
+            <span id="preowned-stock-loading" class="loading-indicator">Looking up stock number...</span>
+
+            <span id="preowned-stock-error" class="error-message"></span>
+
+          </div>
+
+          <p>One moment while I check on this vehicle...</p>
+
+          <div class="input-group">
+
+            <label for="preowned-year">Year:</label>
+
+            <select id="preowned-year" onchange="loadMakes('preowned')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="preowned-make">Make:</label>
+
+            <select id="preowned-make" onchange="loadModels('preowned')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="preowned-model">Model:</label>
+
+            <select id="preowned-model"></select>
+
+          </div>
+
+          <button class="view-vehicle-info" id="preowned-view-vehicle-info" onclick="showVehicleInfo('preowned')">View Vehicle Info</button>
+
+          <p>Great news! The <span id="preowned-selectedVehicle">vehicle</span> is still available! <span id="preowned-carfax-details"></span></p>
+
+          <p><strong>What's most important to you in your next vehicle?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-features">Most Important Features:</label>
+
+            <input type="text" id="preowned-features" placeholder="Enter important features">
+
+          </div>
+
+          <p><strong>Do you have a vehicle that you would be trading in? (Year, Make, Model)</strong></p>
+
+          <div class="buttons">
+
+            <button onclick="showPreownedTradeInOption('preowned-has-trade')">Has Trade-In</button>
+
+            <button onclick="showPreownedTradeInOption('preowned-no-trade')">Does Not Have Trade-In</button>
+
+          </div>
+
+
+
+          <div id="preowned-has-trade" class="section">
+
+            <h2>Has Trade-In</h2>
+
+            <p><strong>What is the Year, Make, and Model of your trade-in vehicle?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-year">Year:</label>
+
+              <select id="preowned-trade-year" onchange="loadMakes('preowned-trade')"></select>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-make">Make:</label>
+
+              <select id="preowned-trade-make" onchange="loadModels('preowned-trade')"></select>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-model">Model:</label>
+
+              <select id="preowned-trade-model"></select>
+
+            </div>
+
+            <p><strong>How many miles are on your <span id="preowned-trade-selectedMake">vehicle</span>?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-miles">Miles:</label>
+
+              <input type="text" id="preowned-trade-miles" placeholder="Enter miles">
+
+            </div>
+
+            <p><strong>And what is the main reason you are considering replacing the <span id="preowned-trade-selectedModel">vehicle</span>?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-reason">Main Reason:</label>
+
+              <input type="text" id="preowned-trade-reason" placeholder="Enter main reason">
+
+            </div>
+
+            <p><strong>Also, do you live and work around the area?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-location">Live/Work Location:</label>
+
+              <input type="text" id="preowned-trade-location" placeholder="Enter live/work location">
+
+            </div>
+
+            <p><strong>This is a fun question I always like to ask, what do you enjoy doing when you're not car shopping?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-hobbies">Hobbies/Interests:</label>
+
+              <input type="text" id="preowned-trade-hobbies" placeholder="Enter hobbies/interests">
+
+            </div>
+
+            <p><strong>I love that, thank you, it's just a fun question I like to ask. Would you like for us to send you a personalized walkaround video of the <span id="preowned-selectedVehicle2">vehicle</span>?</strong></p>
+
+            <div class="buttons">
+
+              <button onclick="showPreownedTradeVideoOption('preowned-trade-video-yes')">Yes</button>
+
+              <button onclick="showPreownedTradeVideoOption('preowned-trade-video-no')">No</button>
+
+            </div>
+
+            <div id="preowned-trade-video-yes" class="section">
+
+              <p>Sounds good! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="preowned-trade-video-yes-name">Full Name:</label>
+
+                <input type="text" id="preowned-trade-video-yes-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <div id="preowned-trade-video-no" class="section">
+
+              <p>Not a problem! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="preowned-trade-video-no-name">Full Name:</label>
+
+                <input type="text" id="preowned-trade-video-no-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <p><strong>And what's a good phone number for you?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-phone">Phone Number:</label>
+
+              <input type="tel" id="preowned-trade-phone" placeholder="Enter phone number">
+
+            </div>
+
+            <p id="preowned-trade-video-message"></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-datetime">Date and Time:</label>
+
+              <input type="datetime-local" id="preowned-trade-datetime">
+
+            </div>
+
+            <p><strong>Quick question, if you don’t mind me asking, what makes a good salesperson to you personally?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-salesperson">Good Salesperson Qualities:</label>
+
+              <input type="text" id="preowned-trade-salesperson" placeholder="Enter qualities">
+
+            </div>
+
+            <p><strong>Thank you so much for sharing that with me. And one more thing, how did you hear about us? Which website were you browsing?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-trade-source">Source:</label>
+
+              <input type="text" id="preowned-trade-source" placeholder="Enter source or website">
+
+            </div>
+
+            <p id="preowned-trade-confirmation"></p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+            <div class="buttons">
+
+              <button onclick="generateNote('preowned-trade')">Generate Note</button>
+
+            </div>
+
+          </div>
+
+
+
+          <div id="preowned-no-trade" class="section">
+
+            <h2>No Trade-In</h2>
+
+            <p><strong>Also, do you live and work around the area?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-trade-location">Live/Work Location:</label>
+
+              <input type="text" id="preowned-no-trade-location" placeholder="Enter live/work location">
+
+            </div>
+
+            <p><strong>This is a fun question I always like to ask, what do you enjoy doing when you're not car shopping?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-trade-hobbies">Hobbies/Interests:</label>
+
+              <input type="text" id="preowned-no-trade-hobbies" placeholder="Enter hobbies/interests">
+
+            </div>
+
+            <p><strong>I love that, thank you, it's just a fun question I like to ask. Would you like for us to send you a personalized walkaround video of the <span id="preowned-selectedVehicle4">vehicle</span>?</strong></p>
+
+            <div class="buttons">
+
+              <button onclick="showPreownedVideoOption('preowned-video-yes')">Yes</button>
+
+              <button onclick="showPreownedVideoOption('preowned-video-no')">No</button>
+
+            </div>
+
+            <div id="preowned-video-yes" class="section">
+
+              <p>Sounds good! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="preowned-video-yes-name">Full Name:</label>
+
+                <input type="text" id="preowned-video-yes-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <div id="preowned-video-no" class="section">
+
+              <p>Not a problem! May I have your first and last name?</p>
+
+              <div class="input-group">
+
+                <label for="preowned-video-no-name">Full Name:</label>
+
+                <input type="text" id="preowned-video-no-name" placeholder="Enter full name">
+
+              </div>
+
+            </div>
+
+            <p><strong>And what's a good phone number for you?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-trade-phone">Phone Number:</label>
+
+              <input type="tel" id="preowned-no-trade-phone" placeholder="Enter phone number">
+
+            </div>
+
+            <p id="preowned-no-trade-video-message"></p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-trade-datetime">Date and Time:</label>
+
+              <input type="datetime-local" id="preowned-no-trade-datetime">
+
+            </div>
+
+            <p><strong>Quick question, if you don’t mind me asking, what makes a good salesperson to you personally?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-trade-salesperson">Good Salesperson Qualities:</label>
+
+              <input type="text" id="preowned-no-trade-salesperson" placeholder="Enter qualities">
+
+            </div>
+
+            <p><strong>Thank you so much for sharing that with me. And one more thing, how did you hear about us? Which website were you browsing?</strong></p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-trade-source">Source:</label>
+
+              <input type="text" id="preowned-no-trade-source" placeholder="Enter source or website">
+
+            </div>
+
+            <p id="preowned-no-trade-confirmation"></p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+            <div class="buttons">
+
+              <button onclick="generateNote('preowned-no-trade')">Generate Note</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="preowned-no-stock" class="section">
+
+          <h2>No Stock Number</h2>
+
+          <p><strong>Not a problem! Let's get some information about the vehicle. What is the year, make, and model?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-year">Year:</label>
+
+            <select id="preowned-no-stock-year" onchange="loadMakes('preowned-no-stock')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-make">Make:</label>
+
+            <select id="preowned-no-stock-make" onchange="loadModels('preowned-no-stock')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-model">Model:</label>
+
+            <select id="preowned-no-stock-model"></select>
+
+          </div>
+
+          <p><strong>What is the color of it?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-color">Color:</label>
+
+            <input type="text" id="preowned-no-stock-color" placeholder="Enter color">
+
+          </div>
+
+          <p>One moment while I check on this vehicle...</p>
+
+          <p>Great news! The <span id="preowned-no-stock-selectedVehicle">vehicle</span> is still available! It’s got a clean Carfax and is a one-owner, so this vehicle has been very well cared for.</p>
+
+          <p><strong>What's most important to you in your next vehicle?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-features">Most Important Features:</label>
+
+            <input type="text" id="preowned-no-stock-features" placeholder="Enter important features">
+
+          </div>
+
+          <p><strong>Also, do you live and work around the area?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-location">Live/Work Location:</label>
+
+            <input type="text" id="preowned-no-stock-location" placeholder="Enter live/work location">
+
+          </div>
+
+          <p><strong>This is a fun question I always like to ask, what do you enjoy doing when you're not car shopping?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-hobbies">Hobbies/Interests:</label>
+
+            <input type="text" id="preowned-no-stock-hobbies" placeholder="Enter hobbies/interests">
+
+          </div>
+
+          <p><strong>I love that, thank you, it's just a fun question I like to ask. Would you like for us to send you a personalized walkaround video of the <span id="preowned-no-stock-selectedVehicle2">vehicle</span>?</strong></p>
+
+          <div class="buttons">
+
+            <button onclick="showPreownedNoStockVideoOption('preowned-no-stock-video-yes')">Yes</button>
+
+            <button onclick="showPreownedNoStockVideoOption('preowned-no-stock-video-no')">No</button>
+
+          </div>
+
+          <div id="preowned-no-stock-video-yes" class="section">
+
+            <p>Sounds good! May I have your first and last name?</p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-stock-video-yes-name">Full Name:</label>
+
+              <input type="text" id="preowned-no-stock-video-yes-name" placeholder="Enter full name">
+
+            </div>
+
+          </div>
+
+          <div id="preowned-no-stock-video-no" class="section">
+
+            <p>Not a problem! May I have your first and last name?</p>
+
+            <div class="input-group">
+
+              <label for="preowned-no-stock-video-no-name">Full Name:</label>
+
+              <input type="text" id="preowned-no-stock-video-no-name" placeholder="Enter full name">
+
+            </div>
+
+          </div>
+
+          <p><strong>And what's a good phone number for you?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-phone">Phone Number:</label>
+
+            <input type="tel" id="preowned-no-stock-phone" placeholder="Enter phone number">
+
+          </div>
+
+          <p id="preowned-no-stock-video-message"></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-datetime">Date and Time:</label>
+
+            <input type="datetime-local" id="preowned-no-stock-datetime">
+
+          </div>
+
+          <p><strong>Quick question, if you don’t mind me asking, what makes a good salesperson to you personally?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-salesperson">Good Salesperson Qualities:</label>
+
+            <input type="text" id="preowned-no-stock-salesperson" placeholder="Enter qualities">
+
+          </div>
+
+          <p><strong>Thank you so much for sharing that with me. And one more thing, how did you hear about us? Which website were you browsing?</strong></p>
+
+          <div class="input-group">
+
+            <label for="preowned-no-stock-source">Source:</label>
+
+            <input type="text" id="preowned-no-stock-source" placeholder="Enter source or website">
+
+          </div>
+
+          <p id="preowned-no-stock-confirmation"></p>
+
+          <div class="closing-text">
+
+            <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+            <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+            <p>Thank you—and I can’t wait to meet you!</p>
+
+          </div>
+
+          <div class="buttons">
+
+            <button onclick="generateNote('preowned-no-stock')">Generate Note</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <div id="sell" class="section">
+
+        <h2>Sell My Vehicle</h2>
+
+        <p>It sounds like you're looking for the value of your current vehicle—is that right?</p>
+
+        <p><strong>- Yes</strong></p>
+
+        <p>Perfect, you have the right person and I can help you with that. My name is __________.<br>
+
+        What is the Year, Make, and Model of your vehicle?</p>
+
+        <div class="input-group">
+
+          <label for="sell-year">Year:</label>
+
+          <select id="sell-year" onchange="loadMakes('sell')"></select>
+
+        </div>
+
+        <div class="input-group">
+
+          <label for="sell-make">Make:</label>
+
+          <select id="sell-make" onchange="loadModels('sell')"></select>
+
+        </div>
+
+        <div class="input-group">
+
+          <label for="sell-model">Model:</label>
+
+          <select id="sell-model"></select>
+
+        </div>
+
+        <p style="margin-top: 20px;">Sounds good! I can help you with your value in a few ways. In fact, depending on your <span id='sell-selectedMake'>vehicle</span>'s condition, I may already have an interested party for it.<br>
+
+        While you are here, I can offer you an Allowance based on your <span id='sell-selectedModel'>vehicle</span>, which is the actual cash value of what we would write a check for, and I will see who I know that is already interested.<br>
+
+        When would be a good time to bring in your <span id='sell-selectedVehicle'>vehicle</span> for us to give you the actual cash value?</p>
+
+        <div class="closing-text">
+
+          <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+          <p>If you don’t mind, could you do me a small favor? Whether you buy a car from us or not, it would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+          <p>Thank you—and I can’t wait to meet you!</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+	<div id="service" class="section script-box">
+
+      <h2>Service Department</h2>
+
+      <p>Thank you for calling Hutchinson Auto Group. Are you calling to check the status of a vehicle or to schedule an appointment?</p>
+
+      <div class="buttons">
+
+        <button onclick="showServiceSubsection('status')">Status</button>
+
+        <button onclick="showServiceSubsection('schedule')">Schedule an Appointment</button>
+
+      </div>
+
+
+
+      <div id="status" class="section">
+
+        <h2>Check Vehicle Status</h2>
+
+        <p>So, you are calling to check where the vehicle is in the process or when it will be ready. Is that right?</p>
+
+        <div class="buttons">
+
+          <button onclick="showStatusSubsection('process')">Where Vehicle Is In Process</button>
+
+          <button onclick="showStatusSubsection('ready')">When Vehicle Will Be Ready</button>
+
+        </div>
+
+
+
+        <div id="process" class="section">
+
+          <h2>Vehicle Process Status</h2>
+
+          <p>Great! Do you mind holding while I go and check with an advisor or, would you rather I call you back with that information?</p>
+
+          <div class="buttons">
+
+            <button onclick="showStatusOption('process-hold')">Hold</button>
+
+            <button onclick="showStatusOption('process-callback')">Call Back</button>
+
+          </div>
+
+          <div id="process-hold" class="section">
+
+            <p>I am going to place you on a brief hold and I will be back with the information you requested.</p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+          </div>
+
+          <div id="process-callback" class="section">
+
+            <p>I will go and get the information that you requested, and I will call you back. Give me about 10-15 minutes.</p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="ready" class="section">
+
+          <h2>Vehicle Ready Status</h2>
+
+          <p>Great! Do you mind holding while I go and check with an advisor or, would you rather I call you back with that information?</p>
+
+          <div class="buttons">
+
+            <button onclick="showStatusOption('ready-hold')">Hold</button>
+
+            <button onclick="showStatusOption('ready-callback')">Call Back</button>
+
+          </div>
+
+          <div id="ready-hold" class="section">
+
+            <p>I am going to place you on a brief hold and I will be back with the information you requested.</p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+          </div>
+
+          <div id="ready-callback" class="section">
+
+            <p>I will go and get the information that you requested, and I will call you back. Give me about 10-15 minutes.</p>
+
+            <div class="closing-text">
+
+              <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+              <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+              <p>Thank you—and I can’t wait to meet you!</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <div id="schedule" class="section">
+
+        <h2>Schedule an Appointment</h2>
+
+        <p>So, will this be for routine maintenance, a repair, or for a recall? Is that right?</p>
+
+        <div class="buttons">
+
+          <button onclick="showScheduleSubsection('maintenance')">Routine Maintenance</button>
+
+          <button onclick="showScheduleSubsection('repair')">Repair</button>
+
+          <button onclick="showScheduleSubsection('recall')">Recall</button>
+
+        </div>
+
+
+
+        <div id="maintenance" class="section">
+
+          <h2>Routine Maintenance</h2>
+
+          <p>I'd be happy to help you with that. May I please get your full name to get started?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-name">Full Name:</label>
+
+            <input type="text" id="maintenance-name" placeholder="Enter full name">
+
+          </div>
+
+          <p>May I also get the best phone number to reach you?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-phone">Phone Number:</label>
+
+            <input type="tel" id="maintenance-phone" placeholder="Enter phone number">
+
+          </div>
+
+          <p>And your email address?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-email">Email:</label>
+
+            <input type="email" id="maintenance-email" placeholder="Enter email address">
+
+          </div>
+
+          <p>Perfect. Lastly, could you verify your address for me please?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-address">Address:</label>
+
+            <input type="text" id="maintenance-address" placeholder="Enter address">
+
+          </div>
+
+          <p>Now, let's get some information about your vehicle. What is the year, make, and model?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-year">Year:</label>
+
+            <select id="maintenance-year" onchange="loadMakes('maintenance')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="maintenance-make">Make:</label>
+
+            <select id="maintenance-make" onchange="loadModels('maintenance')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="maintenance-model">Model:</label>
+
+            <select id="maintenance-model"></select>
+
+          </div>
+
+          <p>Do you happen to know the estimated mileage?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-mileage">Mileage:</label>
+
+            <input type="text" id="maintenance-mileage" placeholder="Enter mileage">
+
+          </div>
+
+          <p>What services would you like to schedule for your vehicle? (e.g., oil change, tire rotation, etc.)</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-services">Services:</label>
+
+            <input type="text" id="maintenance-services" placeholder="Enter services">
+
+          </div>
+
+          <p>When you bring your vehicle in, are you going to drop it off or wait for it?</p>
+
+          <div class="buttons">
+
+            <button onclick="setDropOffWait('maintenance', 'Drop Off')">Drop Off</button>
+
+            <button onclick="setDropOffWait('maintenance', 'Wait')">Wait</button>
+
+          </div>
+
+          <p id="maintenance-dropoff-display"></p>
+
+          <p>Is there a specific date and time you were looking to bring your vehicle in?</p>
+
+          <div class="input-group">
+
+            <label for="maintenance-datetime">Date and Time:</label>
+
+            <input type="datetime-local" id="maintenance-datetime">
+
+          </div>
+
+          <p id="maintenance-confirmation"></p>
+
+          <div class="buttons">
+
+            <button onclick="generateNote('maintenance')">Generate Note</button>
+
+          </div>
+
+          <div class="closing-text">
+
+            <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+            <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+            <p>Thank you—and I can’t wait to meet you!</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="repair" class="section">
+
+          <h2>Repair</h2>
+
+          <p>I'd be happy to help you with that. May I please get your full name to get started?</p>
+
+          <div class="input-group">
+
+            <label for="repair-name">Full Name:</label>
+
+            <input type="text" id="repair-name" placeholder="Enter full name">
+
+          </div>
+
+          <p>May I also get the best phone number to reach you?</p>
+
+          <div class="input-group">
+
+            <label for="repair-phone">Phone Number:</label>
+
+            <input type="tel" id="repair-phone" placeholder="Enter phone number">
+
+          </div>
+
+          <p>And your email address?</p>
+
+          <div class="input-group">
+
+            <label for="repair-email">Email:</label>
+
+            <input type="email" id="repair-email" placeholder="Enter email address">
+
+          </div>
+
+          <p>Perfect. Lastly, could you verify your address for me please?</p>
+
+          <div class="input-group">
+
+            <label for="repair-address">Address:</label>
+
+            <input type="text" id="repair-address" placeholder="Enter address">
+
+          </div>
+
+          <p>Now, let's get some information about your vehicle. What is the year, make, and model?</p>
+
+          <div class="input-group">
+
+            <label for="repair-year">Year:</label>
+
+            <select id="repair-year" onchange="loadMakes('repair')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="repair-make">Make:</label>
+
+            <select id="repair-make" onchange="loadModels('repair')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="repair-model">Model:</label>
+
+            <select id="repair-model"></select>
+
+          </div>
+
+          <p>Do you happen to know the estimated mileage?</p>
+
+          <div class="input-group">
+
+            <label for="repair-mileage">Mileage:</label>
+
+            <input type="text" id="repair-mileage" placeholder="Enter mileage">
+
+          </div>
+
+          <p>What kind of issue are you calling about today? (e.g., check engine light is on, oil leak, issues with acceleration, etc.)</p>
+
+          <div class="input-group">
+
+            <label for="repair-issues">Issues:</label>
+
+            <input type="text" id="repair-issues" placeholder="Enter issues">
+
+          </div>
+
+          <p>Right now our diagnostic turnaround time is about a week and a half, and we require that you drop your vehicle off with us.</p>
+
+          <p>My next available diagnostic appointment is...</p>
+
+          <div class="input-group">
+
+            <label for="repair-datetime">Date and Time:</label>
+
+            <input type="datetime-local" id="repair-datetime">
+
+          </div>
+
+          <p id="repair-confirmation"></p>
+
+          <div class="buttons">
+
+            <button onclick="generateNote('repair')">Generate Note</button>
+
+          </div>
+
+          <div class="closing-text">
+
+            <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+            <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+            <p>Thank you—and I can’t wait to meet you!</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="recall" class="section">
+
+          <h2>Recall</h2>
+
+          <p>I'd be happy to help you with that. May I please get your full name to get started?</p>
+
+          <div class="input-group">
+
+            <label for="recall-name">Full Name:</label>
+
+            <input type="text" id="recall-name" placeholder="Enter full name">
+
+          </div>
+
+          <p>May I also get the best phone number to reach you?</p>
+
+          <div class="input-group">
+
+            <label for="recall-phone">Phone Number:</label>
+
+            <input type="tel" id="recall-phone" placeholder="Enter phone number">
+
+          </div>
+
+          <p>And your email address?</p>
+
+          <div class="input-group">
+
+            <label for="recall-email">Email:</label>
+
+            <input type="email" id="recall-email" placeholder="Enter email address">
+
+          </div>
+
+          <p>Perfect. Lastly, could you verify your address for me please?</p>
+
+          <div class="input-group">
+
+            <label for="recall-address">Address:</label>
+
+            <input type="text" id="recall-address" placeholder="Enter address">
+
+          </div>
+
+          <p>Now, let's get some information about your vehicle. What is the year, make, and model?</p>
+
+          <div class="input-group">
+
+            <label for="recall-year">Year:</label>
+
+            <select id="recall-year" onchange="loadMakes('recall')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="recall-make">Make:</label>
+
+            <select id="recall-make" onchange="loadModels('recall')"></select>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="recall-model">Model:</label>
+
+            <select id="recall-model"></select>
+
+          </div>
+
+          <p>Do you happen to know the estimated mileage?</p>
+
+          <div class="input-group">
+
+            <label for="recall-mileage">Mileage:</label>
+
+            <input type="text" id="recall-mileage" placeholder="Enter mileage">
+
+          </div>
+
+          <p>Could you provide the VIN of the vehicle?</p>
+
+          <div class="input-group">
+
+            <label for="recall-vin">VIN:</label>
+
+            <input type="text" id="recall-vin" placeholder="Enter VIN">
+
+          </div>
+
+          <p>Bear with me while the system runs your VIN to locate any and all recalls.</p>
+
+          <p>Your vehicle has...</p>
+
+          <div class="input-group">
+
+            <label for="recall-details">Number of Recalls:</label>
+
+            <input type="text" id="recall-details" placeholder="Enter recalls">
+
+          </div>
+
+          <p>We recommend dropping off your vehicle for the day so we are able to complete the recalls.</p>
+
+          <p>My next available appointment is...</p>
+
+          <div class="input-group">
+
+            <label for="recall-datetime">Date and Time:</label>
+
+            <input type="datetime-local" id="recall-datetime">
+
+          </div>
+
+          <p id="recall-confirmation"></p>
+
+          <div class="buttons">
+
+            <button onclick="generateNote('recall')">Generate Note</button>
+
+          </div>
+
+          <div class="closing-text">
+
+            <p>I just wanted to say—I've been working here for almost a year now, and the way management has treated me has been amazing. I’m really proud to be part of a place that takes care of both its employees and customers. I can’t wait for you to come in and experience it for yourself. I truly believe you'll leave excited to tell your friends and family about how we do things here.</p>
+
+            <p>If you don’t mind, could you do me a small favor? It would mean a lot to me personally if you’d leave a quick Google review about how I treated you. That kind of feedback really helps and would go a long way.</p>
+
+            <p>Thank you—and I can’t wait to meet you!</p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+
+    // Data storage for memory, initialized empty
+
+    let serviceData = {
+
+      maintenance: {},
+
+      repair: {},
+
+      recall: {},
+
+      new: {},
+
+      trade: {},
+
+      'no-trade': {},
+
+      'no-stock': {},
+
+      'preowned-trade': {},
+
+      'preowned-no-trade': {},
+
+      'preowned-no-stock': {}
+
+    };
+
+    let currentSwiper = null;
+
+
+
+    // Clear localStorage and reset serviceData on page load
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      localStorage.removeItem('serviceData'); // Clear stored data
+
+      serviceData = { maintenance: {}, repair: {}, recall: {}, new: {}, trade: {}, 'no-trade': {}, 'no-stock': {}, 'preowned-trade': {}, 'preowned-no-trade': {}, 'preowned-no-stock': {} }; // Reset serviceData
+
+
+
+      // Initialize dropdowns and clear input fields
+
+      ['sell', 'maintenance', 'repair', 'recall', 'new', 'trade', 'no-stock', 'preowned', 'preowned-trade', 'preowned-no-stock'].forEach(prefix => {
+
+        loadYears(prefix); // Load years without restoring saved values
+
+        const inputs = ['name', 'phone', 'email', 'address', 'mileage', 'services', 'issues', 'details', 'datetime', 'vin', 'stock', 'features', 'miles', 'reason', 'location', 'hobbies', 'salesperson', 'source', 'color'];
+
+        inputs.forEach(field => {
+
+          const input = document.getElementById(`${prefix}-${field}`);
+
+          if (input) {
+
+            input.value = ''; // Clear input fields
+
+            if (field === 'datetime') {
+
+              input.addEventListener('change', () => updateConfirmation(prefix));
+
+            }
+
+          }
+
+        });
+
+        const dropOffDisplay = document.getElementById(`${prefix}-dropoff-display`);
+
+        if (dropOffDisplay) {
+
+          dropOffDisplay.textContent = ''; // Clear drop-off display
+
+        }
+
+        const makeDropdown = document.getElementById(`${prefix}-make`);
+
+        const modelDropdown = document.getElementById(`${prefix}-model`);
+
+        if (makeDropdown) {
+
+          makeDropdown.addEventListener("change", () => {
+
+            updateSelectedMake(prefix);
+
+            updateSelectedVehicle(prefix);
+
+          });
+
+        }
+
+        if (modelDropdown) {
+
+          modelDropdown.addEventListener("change", () => updateSelectedVehicle(prefix));
+
+        }
+
+      });
+
+    });
+
+
+
+    // Lookup stock number in CSV and populate dropdowns
+
+    function lookupStockNumber(type) {
+
+      const stockInput = document.getElementById(`${type}-stock`);
+
+      const stockNumber = stockInput?.value.trim();
+
+      const loadingIndicator = document.getElementById(`${type}-stock-loading`);
+
+      const errorMessage = document.getElementById(`${type}-stock-error`);
+
+      const yearDropdown = document.getElementById(`${type}-year`);
+
+      const makeDropdown = document.getElementById(`${type}-make`);
+
+      const modelDropdown = document.getElementById(`${type}-model`);
+
+      const viewButton = document.getElementById(`${type}-view-vehicle-info`);
+
+      const carfaxDetails = type === 'preowned' ? document.getElementById('preowned-carfax-details') : null;
+
+
+
+      if (!stockNumber || !yearDropdown || !makeDropdown || !modelDropdown || !loadingIndicator || !errorMessage || !viewButton) {
+
+        if (errorMessage) errorMessage.style.display = 'none';
+
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+
+        if (viewButton) viewButton.style.display = 'none';
+
+        if (carfaxDetails) carfaxDetails.textContent = '';
+
+        return;
+
+      }
+
+
+
+      loadingIndicator.style.display = 'block';
+
+      errorMessage.style.display = 'none';
+
+      viewButton.style.display = 'none';
+
+      if (carfaxDetails) carfaxDetails.textContent = '';
+
+
+
+      // Use relative URLs to match inbound file and avoid CORS issues
+
+      const csvUrl = type === 'new' 
+
+        ? '/usedmacon/newfeed.csv' 
+
+        : '/usedmacon/usedfeed.csv';
+
+
+
+      fetch(csvUrl)
+
+        .then(response => {
+
+          if (!response.ok) throw new Error('Failed to fetch CSV file');
+
+          return response.text();
+
+        })
+
+        .then(csvText => {
+
+          Papa.parse(csvText, {
+
+            header: true,
+
+            skipEmptyLines: true,
+
+            complete: function(results) {
+
+              const vehicle = results.data.find(row => 
+
+                row['Stock #']?.trim().toLowerCase() === stockNumber.toLowerCase()
+
+              );
+
+              loadingIndicator.style.display = 'none';
+
+
+
+              if (vehicle) {
+
+                const year = vehicle['Year']?.trim();
+
+                const make = vehicle['Make']?.trim();
+
+                const model = vehicle['Model']?.trim();
+
+
+
+                if (year && make && model) {
+
+                  // Populate dropdowns
+
+                  yearDropdown.innerHTML = `<option value="${year}">${year}</option>`;
+
+                  makeDropdown.innerHTML = `<option value="${make}">${make}</option>`;
+
+                  modelDropdown.innerHTML = `<option value="${model}">${model}</option>`;
+
+                  updateSelectedVehicle(type);
+
+                  // Store vehicle data and show view button
+
+                  serviceData[type].vehicle = vehicle;
+
+                  viewButton.style.display = 'block';
+
+                  // Update Carfax details for preowned
+
+                  if (type === 'preowned' && carfaxDetails) {
+
+                    const description = vehicle['Description']?.trim() || '';
+
+                    const carfaxPhrases = [
+
+                      { phrase: 'Certified', label: 'Certified' },
+
+                      { phrase: 'Clean CARFAX', label: 'Clean CARFAX' },
+
+                      { phrase: 'CARFAX One-Owner|1 Owner', label: '1 Owner' },
+
+                      { phrase: 'Priced below KBB Fair Purchase Price', label: 'Priced below KBB Fair Purchase Price' }
+
+                    ];
+
+                    const matchedPhrases = carfaxPhrases
+
+                      .filter(item => new RegExp(item.phrase, 'i').test(description))
+
+                      .map(item => item.label);
+
+                    const hasQualityPhrases = matchedPhrases.some(phrase => 
+
+                      ['Certified', 'Clean CARFAX', '1 Owner'].includes(phrase)
+
+                    );
+
+                    if (matchedPhrases.length === 1 && matchedPhrases[0] === 'Priced below KBB Fair Purchase Price') {
+
+                      carfaxDetails.textContent = `and its Priced below KBB Fair Purchase Price.`;
+
+                    } else if (matchedPhrases.length > 0) {
+
+                      const qualityPhrases = matchedPhrases.filter(phrase => 
+
+                        ['Certified', 'Clean CARFAX', '1 Owner'].includes(phrase)
+
+                      );
+
+                      const includesKBB = matchedPhrases.includes('Priced below KBB Fair Purchase Price');
+
+                      let message = qualityPhrases.join(', ');
+
+                      if (includesKBB) {
+
+                        message = qualityPhrases.length > 0 
+
+                          ? `${message} and its Priced below KBB Fair Purchase Price`
+
+                          : 'its Priced below KBB Fair Purchase Price';
+
+                      }
+
+                      carfaxDetails.textContent = `The Carfax details are ${message}, so this vehicle has been very well cared for.`;
+
+                    }
+
+                  }
+
+                } else {
+
+                  errorMessage.textContent = 'Vehicle data incomplete in CSV';
+
+                  errorMessage.style.display = 'block';
+
+                  resetDropdowns(type);
+
+                }
+
+              } else {
+
+                errorMessage.textContent = 'Stock number not found';
+
+                errorMessage.style.display = 'block';
+
+                resetDropdowns(type);
+
+              }
+
+            },
+
+            error: function(error) {
+
+              loadingIndicator.style.display = 'none';
+
+              errorMessage.textContent = 'Error parsing CSV file';
+
+              errorMessage.style.display = 'block';
+
+              resetDropdowns(type);
+
+              console.error('Papa Parse error:', error);
+
+            }
+
+          });
+
+        })
+
+        .catch(error => {
+
+          loadingIndicator.style.display = 'none';
+
+          errorMessage.textContent = 'Unable to fetch vehicle data';
+
+          errorMessage.style.display = 'block';
+
+          resetDropdowns(type);
+
+          console.error('Fetch error:', error);
+
+        });
+
+    }
+
+
+
+    // Show vehicle info popup
+
+    function showVehicleInfo(type) {
+
+      const vehicle = serviceData[type]?.vehicle;
+
+      const popup = document.getElementById('vehiclePopup');
+
+      const content = document.getElementById('vehiclePopupContent');
+
+      const overlay = document.getElementById('overlay');
+
+
+
+      if (!vehicle || !popup || !content || !overlay) return;
+
+
+
+      // Prepare photos
+
+      const photos = vehicle['Photos']?.trim().split('|').filter(url => url && url.endsWith('.jpg')) || [];
+
+      const galleryHtml = photos.length > 0 
+
+        ? `
+
+          <div class="vehicle-gallery">
+
+            <div class="swiper-container">
+
+              <div class="swiper-wrapper">
+
+                ${photos.map(url => `<div class="swiper-slide"><img src="${url}" alt="Vehicle Image" loading="lazy"></div>`).join('')}
+
+              </div>
+
+              <div class="swiper-button-prev"></div>
+
+              <div class="swiper-button-next"></div>
+
+              <div class="swiper-pagination"></div>
+
+            </div>
+
+          </div>
+
+        `
+
+        : `<div class="vehicle-gallery"><p>No images available</p></div>`;
+
+
+
+      // Prepare action buttons
+
+      const vin = vehicle['VIN']?.trim() || '';
+
+      const dealerId = vehicle['DealerId']?.trim() || '';
+
+      const make = vehicle['Make']?.trim() || '';
+
+      let actionsHtml = '';
+
+      if (type === 'preowned') {
+
+        const carfaxUrl = `https://www.carfax.com/VehicleHistory/p/Report.cfx?partner=DPR_0&vin=${encodeURIComponent(vin)}`;
+
+        let onlineUrl = '';
+
+        switch (dealerId) {
+
+          case 'MP18519':
+
+            onlineUrl = `https://www.kiaofmacon.com/used-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP18517':
+
+            onlineUrl = `https://www.hutchinsongmc.com/used-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP22169':
+
+            onlineUrl = `https://www.hutchinsonmitsubishi.com/used-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP21103':
+
+            onlineUrl = `https://www.hutchinsonfordofforsyth.com/used-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP19913':
+
+            onlineUrl = `https://www.hutchinsonkiaofalbany.com/used-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP19914':
+
+            onlineUrl = `https://www.hutchinsontoyota.com/used-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            break;
+
+          default:
+
+            onlineUrl = '#';
+
+        }
+
+        actionsHtml = `
+
+          <div class="vehicle-actions">
+
+            <a href="${carfaxUrl}" target="_blank" class="vehicle-action-button carfax">View Carfax</a>
+
+            <a href="${onlineUrl}" target="_blank" class="vehicle-action-button online">View Online</a>
+
+          </div>
+
+        `;
+
+      } else {
+
+        let onlineUrl = '';
+
+        let windowStickerUrl = '';
+
+        switch (dealerId) {
+
+          case 'MP18519':
+
+            onlineUrl = `https://www.kiaofmacon.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            windowStickerUrl = `https://www.kiaofmacon.com/dealer-inspire-inventory/window-stickers/kia?vin=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP18517':
+
+            if (make.toLowerCase() === 'cadillac') {
+
+              onlineUrl = `https://www.hutchinsoncadillac.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            } else if (make.toLowerCase() === 'gmc') {
+
+              onlineUrl = `https://www.hutchinsongmc.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            } else {
+
+              onlineUrl = `https://www.hutchinsongmc.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            }
+
+            windowStickerUrl = `https://cws.gm.com/vs-cws/vehshop/v2/vehicle/windowsticker?vin=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP22169':
+
+            onlineUrl = `https://www.hutchinsonmitsubishi.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            windowStickerUrl = `https://www.hutchinsonmitsubishi.com/dealer-inspire-inventory/window-stickers/mitsubishi?vin=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP21103':
+
+            onlineUrl = `https://www.hutchinsonfordofforsyth.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            windowStickerUrl = `https://www.windowsticker.forddirect.com/windowsticker.pdf?vin=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP19913':
+
+            onlineUrl = `https://www.hutchinsonkiaofalbany.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            windowStickerUrl = `https://www.hutchinsonkiaofalbany.com/dealer-inspire-inventory/window-stickers/kia?vin=${encodeURIComponent(vin)}`;
+
+            break;
+
+          case 'MP19914':
+
+            onlineUrl = `https://www.hutchinsontoyota.com/new-vehicles/?q=${encodeURIComponent(vin)}`;
+
+            windowStickerUrl = `https://www.hutchinsontoyota.com/dealer-inspire-inventory/window-stickers/toyota?vin=${encodeURIComponent(vin)}`;
+
+            break;
+
+          default:
+
+            onlineUrl = '#';
+
+            windowStickerUrl = '#';
+
+        }
+
+        actionsHtml = `
+
+          <div class="vehicle-actions">
+
+            <a href="${onlineUrl}" target="_blank" class="vehicle-action-button online">View Online</a>
+
+            <a href="${windowStickerUrl}" target="_blank" class="vehicle-action-button window-sticker">View Window Sticker</a>
+
+          </div>
+
+        `;
+
+      }
+
+
+
+      // Prepare details grid
+
+      const commonDetails = [
+
+        { label: 'Stock #', value: vehicle['Stock #'] || 'N/A' },
+
+        { label: 'VIN', value: vehicle['VIN'] || 'N/A' },
+
+        { label: 'Year', value: vehicle['Year'] || 'N/A' },
+
+        { label: 'Make', value: vehicle['Make'] || 'N/A' },
+
+        { label: 'Model', value: vehicle['Model'] || 'N/A' },
+
+        { label: 'Series', value: vehicle['Series'] || 'N/A' },
+
+        { label: 'Colour', value: vehicle['Colour'] || 'N/A' },
+
+        { label: 'Interior Color', value: vehicle['Interior Color'] || 'N/A' },
+
+        { label: 'Body', value: vehicle['Body'] || 'N/A' },
+
+        { label: 'Transmission', value: vehicle['Transmission'] || 'N/A' },
+
+        { label: 'Door Count', value: vehicle['Door Count'] || 'N/A' },
+
+        { label: 'Odometer', value: vehicle['Odometer'] || 'N/A' },
+
+        { label: 'Engine Cylinder Ct', value: vehicle['Engine Cylinder Ct'] || 'N/A' },
+
+        { label: 'Engine Displacement', value: vehicle['Engine Displacement'] || 'N/A' },
+
+        { label: 'Drivetrain Desc', value: vehicle['Drivetrain Desc'] || 'N/A' },
+
+        { label: 'City MPG', value: vehicle['City MPG'] || 'N/A' },
+
+        { label: 'Highway MPG', value: vehicle['Highway MPG'] || 'N/A' },
+
+        { label: 'Price', value: vehicle['Price'] || 'N/A' }
+
+      ];
+
+
+
+      const typeSpecificDetails = type === 'new' 
+
+        ? [{ label: 'MSRP', value: vehicle['MSRP'] || 'N/A' }]
+
+        : [
+
+            { label: 'Certified', value: vehicle['Certified'] || 'N/A' },
+
+            { label: 'Age', value: vehicle['Age'] || 'N/A' }
+
+          ];
+
+
+
+      const detailsHtml = `
+
+        <div class="vehicle-details-grid">
+
+          ${[...commonDetails, ...typeSpecificDetails].map(detail => `
+
+            <div class="vehicle-detail">
+
+              <strong>${detail.label}:</strong> ${detail.value}
+
+            </div>
+
+          `).join('')}
+
+        </div>
+
+      `;
+
+
+
+      // Prepare description
+
+      const descriptionHtml = `
+
+        <div class="vehicle-description">
+
+          <h3>Details</h3>
+
+          <p>${vehicle['Description'] || 'No description available'}</p>
+
+        </div>
+
+      `;
+
+
+
+      // Populate popup
+
+      content.innerHTML = `
+
+        ${galleryHtml}
+
+        ${actionsHtml}
+
+        ${detailsHtml}
+
+        ${descriptionHtml}
+
+      `;
+
+      popup.style.display = 'block';
+
+      overlay.style.display = 'block';
+
+
+
+      // Initialize Swiper if gallery exists
+
+      if (photos.length > 0) {
+
+        currentSwiper = new Swiper('.swiper-container', {
+
+          loop: true,
+
+          navigation: {
+
+            nextEl: '.swiper-button-next',
+
+            prevEl: '.swiper-button-prev',
+
+          },
+
+          pagination: {
+
+            el: '.swiper-pagination',
+
+            clickable: true,
+
+          },
+
+          lazy: {
+
+            loadPrevNext: true,
+
+          },
+
+        });
+
+      }
+
+    }
+
+
+
+    // Close vehicle info popup
+
+    function closeVehiclePopup() {
+
+      const popup = document.getElementById('vehiclePopup');
+
+      const overlay = document.getElementById('overlay');
+
+      if (popup && overlay) {
+
+        popup.style.display = 'none';
+
+        overlay.style.display = 'none';
+
+        if (currentSwiper) {
+
+          currentSwiper.destroy(true, true);
+
+          currentSwiper = null;
+
+        }
+
+      }
+
+    }
+
+
+
+    // Reset dropdowns to default state
+
+    function resetDropdowns(type) {
+
+      const yearDropdown = document.getElementById(`${type}-year`);
+
+      const makeDropdown = document.getElementById(`${type}-make`);
+
+      const modelDropdown = document.getElementById(`${type}-model`);
+
+      const viewButton = document.getElementById(`${type}-view-vehicle-info`);
+
+      const carfaxDetails = type === 'preowned' ? document.getElementById('preowned-carfax-details') : null;
+
+      if (yearDropdown) loadYears(type);
+
+      if (makeDropdown) makeDropdown.innerHTML = "<option value=''>Select Make</option>";
+
+      if (modelDropdown) modelDropdown.innerHTML = "<option value=''>Select Model</option>";
+
+      if (viewButton) viewButton.style.display = 'none';
+
+      if (carfaxDetails) carfaxDetails.textContent = '';
+
+    }
+
+
+
+    // Hide all sections
+
+    function hideAll() {
+
+      document.querySelectorAll('.section').forEach(section => {
+
+        section.style.display = 'none';
+
+      });
+
+    }
+
+
+
+    // Hide specific subsections
+
+    function hideSubsections(ids) {
+
+      ids.forEach(id => {
+
+        const el = document.getElementById(id);
+
+        if (el) {
+
+          el.style.display = 'none';
+
+        }
+
+      });
+
+    }
+
+
+
+    // Show a top-level section (e.g., sales, service)
+
+    function showSection(id) {
+
+      hideAll();
+
+      const section = document.getElementById(id);
+
+      if (section) {
+
+        section.style.display = 'block';
+
+      } else {
+
+        console.error(`Section with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show sales subsections (new, preowned, sell)
+
+    function showSalesSubsection(id) {
+
+      hideSubsections(['new', 'preowned', 'sell']);
+
+      const subsection = document.getElementById(id);
+
+      if (subsection) {
+
+        subsection.style.display = 'block';
+
+      } else {
+
+        console.error(`Sales subsection with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show new subsections (has-stock, no-stock)
+
+    function showNewSubsection(id) {
+
+      hideSubsections(['has-stock', 'no-stock']);
+
+      const subsection = document.getElementById(id);
+
+      if (subsection) {
+
+        subsection.style.display = 'block';
+
+      } else {
+
+        console.error(`New subsection with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show preowned subsections (preowned-has-stock, preowned-no-stock)
+
+    function showPreownedSubsection(id) {
+
+      hideSubsections(['preowned-has-stock', 'preowned-no-stock']);
+
+      const subsection = document.getElementById(id);
+
+      if (subsection) {
+
+        subsection.style.display = 'block';
+
+      } else {
+
+        console.error(`Preowned subsection with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show trade-in options (has-trade, no-trade)
+
+    function showTradeInOption(id) {
+
+      hideSubsections(['has-trade', 'no-trade']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+      } else {
+
+        console.error(`Trade-in option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show preowned trade-in options (preowned-has-trade, preowned-no-trade)
+
+    function showPreownedTradeInOption(id) {
+
+      hideSubsections(['preowned-has-trade', 'preowned-no-trade']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+      } else {
+
+        console.error(`Preowned trade-in option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show video options for trade (trade-video-yes, trade-video-no)
+
+    function showTradeVideoOption(id) {
+
+      hideSubsections(['trade-video-yes', 'trade-video-no']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+        const message = document.getElementById('trade-video-message');
+
+        const newVehicle = document.getElementById('new-selectedVehicle')?.textContent || 'vehicle';
+
+        const tradeVehicle = document.getElementById('trade-selectedVehicle')?.textContent || 'vehicle';
+
+        if (message) {
+
+          message.textContent = id === 'trade-video-yes' ?
+
+            `Great! I will have one of our product specialists send you a walkaround video. I just sent you a text let me know if you received it... great all you gotta do is reply yes real quick.  Thank you, Are you available sometime today or tomorrow to test drive the ${newVehicle} and have us look at your ${tradeVehicle}?` :
+
+            `Thank you! Are you available sometime today or tomorrow to test drive the ${newVehicle} and have us look at your ${tradeVehicle}?`;
+
+        }
+
+      } else {
+
+        console.error(`Trade video option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show video options for preowned trade (preowned-trade-video-yes, preowned-trade-video-no)
+
+    function showPreownedTradeVideoOption(id) {
+
+      hideSubsections(['preowned-trade-video-yes', 'preowned-trade-video-no']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+        const message = document.getElementById('preowned-trade-video-message');
+
+        const preownedVehicle = document.getElementById('preowned-selectedVehicle')?.textContent || 'vehicle';
+
+        const tradeVehicle = document.getElementById('preowned-trade-selectedVehicle')?.textContent || 'vehicle';
+
+        if (message) {
+
+          message.textContent = id === 'preowned-trade-video-yes' ?
+
+            `Great! I will have one of our product specialists send you a walkaround video.  I just sent you a text let me know if you received it...Great all you gotta do is reply yes real quick....Thanks Are you available sometime today or tomorrow to test drive the ${preownedVehicle} and have us look at your ${tradeVehicle}?` :
+
+            `Thank you! Are you available sometime today or tomorrow to test drive the ${preownedVehicle} and have us look at your ${tradeVehicle}?`;
+
+        }
+
+      } else {
+
+        console.error(`Preowned trade video option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show video options for no-trade (video-yes, video-no)
+
+    function showVideoOption(id) {
+
+      hideSubsections(['video-yes', 'video-no']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+        const message = document.getElementById('no-trade-video-message');
+
+        const newVehicle = document.getElementById('new-selectedVehicle4')?.textContent || 'vehicle';
+
+        if (message) {
+
+          message.textContent = id === 'video-yes' ?
+
+            `Great! I will have one of our product specialists send you a walkaround video.  I just sent you a text let me know if you received it...Great all you gotta do is reply yes real quick....Thanks Are you available sometime today or tomorrow to test drive the ${newVehicle}?` :
+
+            `Thank you! Are you available sometime today or tomorrow to test drive the ${newVehicle}?`;
+
+        }
+
+      } else {
+
+        console.error(`No-trade video option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show video options for preowned no-trade (preowned-video-yes, preowned-video-no)
+
+    function showPreownedVideoOption(id) {
+
+      hideSubsections(['preowned-video-yes', 'preowned-video-no']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+        const message = document.getElementById('preowned-no-trade-video-message');
+
+        const preownedVehicle = document.getElementById('preowned-selectedVehicle4')?.textContent || 'vehicle';
+
+        if (message) {
+
+          message.textContent = id === 'preowned-video-yes' ?
+
+            `Great! I will have one of our product specialists send you a walkaround video.  I just sent you a text let me know if you received it...Great all you gotta do is reply yes real quick....Thanks Are you available sometime today or tomorrow to test drive the ${preownedVehicle}?` :
+
+            `Thank you! Are you available sometime today or tomorrow to test drive the ${preownedVehicle}?`;
+
+        }
+
+      } else {
+
+        console.error(`Preowned no-trade video option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show no-stock video options (no-stock-video-yes, no-stock-video-no)
+
+    function showNoStockVideoOption(id) {
+
+      hideSubsections(['no-stock-video-yes', 'no-stock-video-no']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+        const message = document.getElementById('no-stock-video-message');
+
+        const newVehicle = document.getElementById('no-stock-selectedVehicle2')?.textContent || 'vehicle';
+
+        if (message) {
+
+          message.textContent = id === 'no-stock-video-yes' ?
+
+            `Great! I will have one of our product specialists send you a walkaround video.  I just sent you a text let me know if you received it...Great all you gotta do is reply yes real quick....Thanks Are you available sometime today or tomorrow to test drive the ${newVehicle}?` :
+
+            `Thank you! Are you available sometime today or tomorrow to test drive the ${newVehicle}?`;
+
+        }
+
+      } else {
+
+        console.error(`No-stock video option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show preowned no-stock video options (preowned-no-stock-video-yes, preowned-no-stock-video-no)
+
+    function showPreownedNoStockVideoOption(id) {
+
+      hideSubsections(['preowned-no-stock-video-yes', 'preowned-no-stock-video-no']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+        const message = document.getElementById('preowned-no-stock-video-message');
+
+        const preownedVehicle = document.getElementById('preowned-no-stock-selectedVehicle2')?.textContent || 'vehicle';
+
+        if (message) {
+
+          message.textContent = id === 'preowned-no-stock-video-yes' ?
+
+            `Great! I will have one of our product specialists send you a walkaround video.  I just sent you a text let me know if you received it...Great all you gotta do is reply yes real quick....Thanks Are you available sometime today or tomorrow to test drive the ${preownedVehicle}?` :
+
+            `Thank you! Are you available sometime today or tomorrow to test drive the ${preownedVehicle}?`;
+
+        }
+
+      } else {
+
+        console.error(`Preowned no-stock video option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show service subsections (status, schedule)
+
+    function showServiceSubsection(id) {
+
+      hideSubsections(['status', 'schedule']);
+
+      const subsection = document.getElementById(id);
+
+      if (subsection) {
+
+        subsection.style.display = 'block';
+
+      } else {
+
+        console.error(`Service subsection with ID ${id} not found.`);
+
+        alert(`Error: Service section "${id}" not found. Please contact support.`);
+
+      }
+
+    }
+
+
+
+    // Show status subsections (process, ready)
+
+    function showStatusSubsection(id) {
+
+      hideSubsections(['process', 'ready']);
+
+      const subsection = document.getElementById(id);
+
+      if (subsection) {
+
+        subsection.style.display = 'block';
+
+      } else {
+
+        console.error(`Status subsection with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show status options (hold, callback for process or ready)
+
+    function showStatusOption(id) {
+
+      hideSubsections(['process-hold', 'process-callback', 'ready-hold', 'ready-callback']);
+
+      const option = document.getElementById(id);
+
+      if (option) {
+
+        option.style.display = 'block';
+
+      } else {
+
+        console.error(`Status option with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Show schedule subsections (maintenance, repair, recall)
+
+    function showScheduleSubsection(id) {
+
+      hideSubsections(['maintenance', 'repair', 'recall']);
+
+      const subsection = document.getElementById(id);
+
+      if (subsection) {
+
+        subsection.style.display = 'block';
+
+      } else {
+
+        console.error(`Schedule subsection with ID ${id} not found.`);
+
+      }
+
+    }
+
+
+
+    // Load Year dropdown
+
+    function loadYears(prefix) {
+
+      const currentYear = new Date().getFullYear();
+
+      const yearDropdown = document.getElementById(`${prefix}-year`);
+
+      if (yearDropdown) {
+
+        yearDropdown.innerHTML = "<option value=''>Select Year</option>";
+
+        for (let year = currentYear; year >= 1995; year--) {
+
+          yearDropdown.innerHTML += `<option value='${year}'>${year}</option>`;
+
+        }
+
+      }
+
+    }
+
+
+
+    async function loadMakes(prefix) {
+
+      const year = document.getElementById(`${prefix}-year`)?.value || "";
+
+      const makeDropdown = document.getElementById(`${prefix}-make`);
+
+      if (makeDropdown) {
+
+        makeDropdown.innerHTML = "<option value=''>Loading makes...</option>";
+
+        try {
+
+          const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json`);
+
+          const data = await res.json();
+
+          makeDropdown.innerHTML = "<option value=''>Select Make</option>";
+
+          data.Results.sort((a, b) => a.MakeName.localeCompare(b.MakeName)).forEach(make => {
+
+            makeDropdown.innerHTML += `<option value='${make.MakeName}'>${make.MakeName}</option>`;
+
+          });
+
+        } catch (error) {
+
+          console.error('Error loading makes:', error);
+
+          makeDropdown.innerHTML = "<option value=''>Error loading makes</option>";
+
+        }
+
+      }
+
+      const modelDropdown = document.getElementById(`${prefix}-model`);
+
+      if (modelDropdown) {
+
+        modelDropdown.innerHTML = "<option value=''>Select Model</option>";
+
+      }
+
+      updateSelectedMake(prefix);
+
+    }
+
+
+
+    async function loadModels(prefix) {
+
+      const year = document.getElementById(`${prefix}-year`)?.value || "";
+
+      const make = document.getElementById(`${prefix}-make`)?.value || "";
+
+      const modelDropdown = document.getElementById(`${prefix}-model`);
+
+      if (modelDropdown) {
+
+        modelDropdown.innerHTML = "<option value=''>Loading models...</option>";
+
+        try {
+
+          const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${make}/modelyear/${year}?format=json`);
+
+          const data = await res.json();
+
+          modelDropdown.innerHTML = "<option value=''>Select Model</option>";
+
+          data.Results.sort((a, b) => a.Model_Name.localeCompare(b.Model_Name)).forEach(model => {
+
+            modelDropdown.innerHTML += `<option value='${model.Model_Name}'>${model.Model_Name}</option>`;
+
+          });
+
+        } catch (error) {
+
+          console.error('Error loading models:', error);
+
+          modelDropdown.innerHTML = "<option value=''>Error loading models</option>";
+
+        }
+
+      }
+
+      updateSelectedVehicle(prefix);
+
+    }
+
+
+
+    function updateSelectedVehicle(prefix) {
+
+      const make = document.getElementById(`${prefix}-make`)?.value || "";
+
+      const model = document.getElementById(`${prefix}-model`)?.value || "";
+
+      const spanVehicle = document.getElementById(`${prefix}-selectedVehicle`) || document.getElementById(`${prefix}-selected-vehicle`);
+
+      const spanModel = document.getElementById(`${prefix}-selectedModel`) || document.getElementById(`${prefix}-selected-model`);
+
+      const spanVehicle2 = document.getElementById(`${prefix}-selectedVehicle2`) || document.getElementById(`${prefix}-selected-vehicle2`);
+
+      const spanVehicle4 = document.getElementById(`${prefix}-selectedVehicle4`) || document.getElementById(`${prefix}-selected-vehicle4`);
+
+      if (spanVehicle) {
+
+        spanVehicle.textContent = make && model ? `${make} ${model}` : "vehicle";
+
+      }
+
+      if (spanModel) {
+
+        spanModel.textContent = model || "vehicle";
+
+      }
+
+      if (spanVehicle2) {
+
+        spanVehicle2.textContent = make && model ? `${make} ${model}` : "vehicle";
+
+      }
+
+      if (spanVehicle4) {
+
+        spanVehicle4.textContent = make && model ? `${make} ${model}` : "vehicle";
+
+      }
+
+      serviceData[prefix] = { ...serviceData[prefix], make, model };
+
+      localStorage.setItem('serviceData', JSON.stringify(serviceData));
+
+    }
+
+
+
+    function updateSelectedMake(prefix) {
+
+      const make = document.getElementById(`${prefix}-make`)?.value || "";
+
+      const span = document.getElementById(`${prefix}-selectedMake`) || document.getElementById(`${prefix}-selected-make`);
+
+      if (span) {
+
+        span.textContent = make || "vehicle";
+
+      }
+
+      serviceData[prefix] = { ...serviceData[prefix], make };
+
+      localStorage.setItem('serviceData', JSON.stringify(serviceData));
+
+    }
+
+
+
+    function setDropOffWait(prefix, option) {
+
+      serviceData[prefix] = { ...serviceData[prefix], dropOffWait: option };
+
+      localStorage.setItem('serviceData', JSON.stringify(serviceData));
+
+      const display = document.getElementById(`${prefix}-dropoff-display`);
+
+      if (display) {
+
+        display.textContent = `Selected: ${option}`;
+
+      }
+
+    }
+
+
+
+    function formatFriendlyDate(datetime) {
+
+      if (!datetime) return "date and time";
+
+      const scheduledDate = new Date(datetime);
+
+      const today = new Date();
+
+      today.setHours(0, 0, 0, 0); // Reset time for comparison
+
+      const tomorrow = new Date(today);
+
+      tomorrow.setDate(today.getDate() + 1);
+
+      const oneWeekLater = new Date(today);
+
+      oneWeekLater.setDate(today.getDate() + 7);
+
+      const twoWeeksLater = new Date(today);
+
+      twoWeeksLater.setDate(today.getDate() + 14);
+
+
+
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+      const time = scheduledDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
+
+
+
+      const scheduledDateOnly = new Date(scheduledDate);
+
+      scheduledDateOnly.setHours(0, 0, 0, 0);
+
+
+
+      if (scheduledDateOnly.getTime() === tomorrow.getTime()) {
+
+        return `tomorrow at ${time}`;
+
+      } else if (scheduledDateOnly.getTime() >= today.getTime() && scheduledDateOnly.getTime() <= oneWeekLater.getTime()) {
+
+        return `${days[scheduledDate.getDay()]} at ${time}`;
+
+      } else if (scheduledDateOnly.getTime() <= twoWeeksLater.getTime()) {
+
+        return `next ${days[scheduledDate.getDay()]} at ${time}`;
+
+      }
+
+      return `${days[scheduledDate.getDay()]} at ${time}`; // Fallback
+
+    }
+
+
+
+    function updateConfirmation(prefix) {
+
+      const datetime = document.getElementById(`${prefix}-datetime`)?.value;
+
+      const confirmation = document.getElementById(`${prefix}-confirmation`);
+
+      let name;
+
+      if (prefix === 'trade') {
+
+        name = document.getElementById('trade-video-yes-name')?.value || document.getElementById('trade-video-no-name')?.value;
+
+      } else if (prefix === 'no-trade') {
+
+        name = document.getElementById('video-yes-name')?.value || document.getElementById('video-no-name')?.value;
+
+      } else if (prefix === 'no-stock') {
+
+        name = document.getElementById('no-stock-video-yes-name')?.value || document.getElementById('no-stock-video-no-name')?.value;
+
+      } else if (prefix === 'preowned-trade') {
+
+        name = document.getElementById('preowned-trade-video-yes-name')?.value || document.getElementById('preowned-trade-video-no-name')?.value;
+
+      } else if (prefix === 'preowned-no-trade') {
+
+        name = document.getElementById('preowned-video-yes-name')?.value || document.getElementById('preowned-video-no-name')?.value;
+
+      } else if (prefix === 'preowned-no-stock') {
+
+        name = document.getElementById('preowned-no-stock-video-yes-name')?.value || document.getElementById('preowned-no-stock-video-no-name')?.value;
+
+      } else {
+
+        name = document.getElementById(`${prefix}-name`)?.value;
+
+      }
+
+      if (datetime && confirmation) {
+
+        const formattedDate = formatFriendlyDate(datetime);
+
+        confirmation.textContent = `Sounds good, ${name || "customer"}, I have you scheduled to stop by ${formattedDate}.`;
+
+        serviceData[prefix] = { ...serviceData[prefix], datetime, name };
+
+        localStorage.setItem('serviceData', JSON.stringify(serviceData));
+
+      }
+
+    }
+
+
+
+    function generateNote(type) {
+
+      const data = serviceData[type] || {};
+
+      let name;
+
+      let phone;
+
+      if (['trade', 'no-trade', 'no-stock', 'preowned-trade', 'preowned-no-trade', 'preowned-no-stock'].includes(type)) {
+
+        if (type === 'trade') {
+
+          name = document.getElementById('trade-video-yes-name')?.value || document.getElementById('trade-video-no-name')?.value || "Not provided";
+
+          phone = document.getElementById('trade-phone')?.value || "Not provided";
+
+        } else if (type === 'no-trade') {
+
+          name = document.getElementById('video-yes-name')?.value || document.getElementById('video-no-name')?.value || "Not provided";
+
+          phone = document.getElementById('no-trade-phone')?.value || "Not provided";
+
+        } else if (type === 'no-stock') {
+
+          name = document.getElementById('no-stock-video-yes-name')?.value || document.getElementById('no-stock-video-no-name')?.value || "Not provided";
+
+          phone = document.getElementById('no-stock-phone')?.value || "Not provided";
+
+        } else if (type === 'preowned-trade') {
+
+          name = document.getElementById('preowned-trade-video-yes-name')?.value || document.getElementById('preowned-trade-video-no-name')?.value || "Not provided";
+
+          phone = document.getElementById('preowned-trade-phone')?.value || "Not provided";
+
+        } else if (type === 'preowned-no-trade') {
+
+          name = document.getElementById('preowned-video-yes-name')?.value || document.getElementById('preowned-video-no-name')?.value || "Not provided";
+
+          phone = document.getElementById('preowned-no-trade-phone')?.value || "Not provided";
+
+        } else if (type === 'preowned-no-stock') {
+
+          name = document.getElementById('preowned-no-stock-video-yes-name')?.value || document.getElementById('preowned-no-stock-video-no-name')?.value || "Not provided";
+
+          phone = document.getElementById('preowned-no-stock-phone')?.value || "Not provided";
+
+        }
+
+      } else {
+
+        name = document.getElementById(`${type}-name`)?.value || "Not provided";
+
+        phone = document.getElementById(`${type}-phone`)?.value || "Not provided";
+
+      }
+
+      let noteContent = document.createElement('div');
+
+
+
+      if (['trade', 'no-trade', 'no-stock', 'preowned-trade', 'preowned-no-trade', 'preowned-no-stock'].includes(type)) {
+
+        const isPreowned = type.includes('preowned');
+
+        const stock = document.getElementById(`${isPreowned ? 'preowned' : 'new'}-stock`)?.value || "Not provided";
+
+        const year = document.getElementById(`${isPreowned ? 'preowned' : 'new'}-year`)?.value || document.getElementById(`${isPreowned ? 'preowned-no-stock' : 'no-stock'}-year`)?.value || "Not provided";
+
+        const make = document.getElementById(`${isPreowned ? 'preowned' : 'new'}-make`)?.value || document.getElementById(`${isPreowned ? 'preowned-no-stock' : 'no-stock'}-make`)?.value || "Not provided";
+
+        const model = document.getElementById(`${isPreowned ? 'preowned' : 'new'}-model`)?.value || document.getElementById(`${isPreowned ? 'preowned-no-stock' : 'no-stock'}-model`)?.value || "Not provided";
+
+        const color = document.getElementById(`${isPreowned ? 'preowned-no-stock' : 'no-stock'}-color`)?.value || "Not provided";
+
+        const features = document.getElementById(`${isPreowned ? (type === 'preowned-no-stock' ? 'preowned-no-stock' : 'preowned') : (type === 'no-stock' ? 'no-stock' : 'new')}-features`)?.value || "Not provided";
+
+        const location = document.getElementById(`${type}-location`)?.value || "Not provided";
+
+        const hobbies = document.getElementById(`${type}-hobbies`)?.value || "Not provided";
+
+        const salesperson = document.getElementById(`${type}-salesperson`)?.value || "Not provided";
+
+        const source = document.getElementById(`${type}-source`)?.value || "Not provided";
+
+        const datetime = document.getElementById(`${type}-datetime`)?.value || "Not provided";
+
+        const formattedDate = datetime !== "Not provided" ? formatFriendlyDate(datetime) : "Not provided";
+
+
+
+        noteContent.innerHTML = `
+
+          <h3>Customer Service Note - ${isPreowned ? 'Preowned' : 'New'} Vehicle Inquiry (${type.includes('trade') ? 'With Trade-In' : 'No Trade-In'})</h3>
+
+          <p><strong>Customer Name:</strong> <span>${name}</span></p>
+
+          <p><strong>Phone Number:</strong> <span>${phone}</span></p>
+
+          <p><strong>Stock Number:</strong> <span>${stock}</span></p>
+
+          <p><strong>Vehicle of Interest:</strong> <span>${year} ${make} ${model}</span></p>
+
+        `;
+
+        if (type === 'no-stock' || type === 'preowned-no-stock') {
+
+          noteContent.innerHTML += `<p><strong>Color:</strong> <span>${color}</span></p>`;
+
+        }
+
+        noteContent.innerHTML += `
+
+          <p><strong>Most Important Features:</strong> <span>${features}</span></p>
+
+          <p><strong>Live/Work Location:</strong> <span>${location}</span></p>
+
+          <p><strong>Hobbies/Interests:</strong> <span>${hobbies}</span></p>
+
+        `;
+
+        if (type === 'trade' || type === 'preowned-trade') {
+
+          const tradePrefix = type === 'trade' ? 'trade' : 'preowned-trade';
+
+          const tradeYear = document.getElementById(`${tradePrefix}-year`)?.value || "Not provided";
+
+          const tradeMake = document.getElementById(`${tradePrefix}-make`)?.value || "Not provided";
+
+          const tradeModel = document.getElementById(`${tradePrefix}-model`)?.value || "Not provided";
+
+          const tradeMiles = document.getElementById(`${tradePrefix}-miles`)?.value || "Not provided";
+
+          const tradeReason = document.getElementById(`${tradePrefix}-reason`)?.value || "Not provided";
+
+          noteContent.innerHTML += `
+
+            <p><strong>Trade-In Vehicle:</strong> <span>${tradeYear} ${tradeMake} ${tradeModel}</span></p>
+
+            <p><strong>Trade-In Mileage:</strong> <span>${tradeMiles}</span></p>
+
+            <p><strong>Reason for Replacing Trade-In:</strong> <span>${tradeReason}</span></p>
+
+          `;
+
+        }
+
+        noteContent.innerHTML += `
+
+          <p><strong>Walkaround Video Requested:</strong> <span>${
+
+            type === 'trade' ? (document.getElementById('trade-video-yes-name')?.value ? 'Yes' : 'No') :
+
+            type === 'no-trade' ? (document.getElementById('video-yes-name')?.value ? 'Yes' : 'No') :
+
+            type === 'no-stock' ? (document.getElementById('no-stock-video-yes-name')?.value ? 'Yes' : 'No') :
+
+            type === 'preowned-trade' ? (document.getElementById('preowned-trade-video-yes-name')?.value ? 'Yes' : 'No') :
+
+            type === 'preowned-no-trade' ? (document.getElementById('preowned-video-yes-name')?.value ? 'Yes' : 'No') :
+
+            (document.getElementById('preowned-no-stock-video-yes-name')?.value ? 'Yes' : 'No')
+
+          }</span></p>
+
+          <p><strong>Scheduled Test Drive:</strong> <span>${formattedDate}</span></p>
+
+          <p><strong>Good Salesperson Qualities:</strong> <span>${salesperson}</span></p>
+
+          <p><strong>How Did You Hear About Us:</strong> <span>${source}</span></p>
+
+        `;
+
+        serviceData[type] = {
+
+          ...data,
+
+          note: noteContent.textContent,
+
+          name,
+
+          phone,
+
+          stock,
+
+          year,
+
+          make,
+
+          model,
+
+          features,
+
+          location,
+
+          hobbies,
+
+          salesperson,
+
+          source,
+
+          datetime,
+
+          videoRequested: type === 'trade' ? (document.getElementById('trade-video-yes-name')?.value ? 'Yes' : 'No') :
+
+                         type === 'no-trade' ? (document.getElementById('video-yes-name')?.value ? 'Yes' : 'No') :
+
+                         type === 'no-stock' ? (document.getElementById('no-stock-video-yes-name')?.value ? 'Yes' : 'No') :
+
+                         type === 'preowned-trade' ? (document.getElementById('preowned-trade-video-yes-name')?.value ? 'Yes' : 'No') :
+
+                         type === 'preowned-no-trade' ? (document.getElementById('preowned-video-yes-name')?.value ? 'Yes' : 'No') :
+
+                         (document.getElementById('preowned-no-stock-video-yes-name')?.value ? 'Yes' : 'No')
+
+        };
+
+        if (type === 'no-stock' || type === 'preowned-no-stock') {
+
+          serviceData[type].color = color;
+
+        }
+
+        if (type === 'trade' || type === 'preowned-trade') {
+
+          const tradePrefix = type === 'trade' ? 'trade' : 'preowned-trade';
+
+          serviceData[type].tradeYear = document.getElementById(`${tradePrefix}-year`)?.value || "";
+
+          serviceData[type].tradeMake = document.getElementById(`${tradePrefix}-make`)?.value || "";
+
+          serviceData[type].tradeModel = document.getElementById(`${tradePrefix}-model`)?.value || "";
+
+          serviceData[type].tradeMiles = document.getElementById(`${tradePrefix}-miles`)?.value || "";
+
+          serviceData[type].tradeReason = document.getElementById(`${tradePrefix}-reason`)?.value || "";
+
+        }
+
+      } else {
+
+        const email = document.getElementById(`${type}-email`)?.value || "Not provided";
+
+        const address = document.getElementById(`${type}-address`)?.value || "Not provided";
+
+        const year = document.getElementById(`${type}-year`)?.value || "Not provided";
+
+        const make = document.getElementById(`${type}-make`)?.value || "Not provided";
+
+        const model = document.getElementById(`${type}-model`)?.value || "Not provided";
+
+        const mileage = document.getElementById(`${type}-mileage`)?.value || "Not provided";
+
+        const datetime = document.getElementById(`${type}-datetime`)?.value || "Not provided";
+
+        const formattedDate = datetime !== "Not provided" ? formatFriendlyDate(datetime) : "Not provided";
+
+
+
+        noteContent.innerHTML = `
+
+          <h3>Customer Service Note - ${type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+
+          <p><strong>Customer Name:</strong> <span>${name}</span></p>
+
+          <p><strong>Phone Number:</strong> <span>${phone}</span></p>
+
+          <p><strong>Email Address:</strong> <span>${email}</span></p>
+
+          <p><strong>Address:</strong> <span>${address}</span></p>
+
+          <p><strong>Vehicle:</strong> <span>${year} ${make} ${model}</span></p>
+
+          <p><strong>Mileage:</strong> <span>${mileage}</span></p>
+
+        `;
+
+        if (type === 'maintenance') {
+
+          const services = document.getElementById(`${type}-services`)?.value || "Not provided";
+
+          const dropOffWait = data.dropOffWait || "Not provided";
+
+          noteContent.innerHTML += `
+
+            <p><strong>Services Requested:</strong> <span>${services}</span></p>
+
+            <p><strong>Drop Off/Wait:</strong> <span>${dropOffWait}</span></p>
+
+            <p><strong>Scheduled Appointment:</strong> <span>${formattedDate}</span></p>
+
+          `;
+
+          serviceData[type] = { ...data, note: noteContent.textContent, name, phone, email, address, year, make, model, mileage, services, dropOffWait, datetime };
+
+        } else if (type === 'repair') {
+
+          const issues = document.getElementById(`${type}-issues`)?.value || "Not provided";
+
+          noteContent.innerHTML += `
+
+            <p><strong>Issues Reported:</strong> <span>${issues}</span></p>
+
+            <p><strong>Diagnostic Turnaround:</strong> <span>Approximately a week and a half (vehicle drop-off required)</span></p>
+
+            <p><strong>Scheduled Diagnostic Appointment:</strong> <span>${formattedDate}</span></p>
+
+          `;
+
+          serviceData[type] = { ...data, note: noteContent.textContent, name, phone, email, address, year, make, model, mileage, issues, datetime };
+
+        } else if (type === 'recall') {
+
+          const vin = document.getElementById(`${type}-vin`)?.value || "Not provided";
+
+          const recalls = document.getElementById(`${type}-details`)?.value || "Not provided";
+
+          noteContent.innerHTML += `
+
+            <p><strong>VIN:</strong> <span>${vin}</span></p>
+
+            <p><strong>Recalls:</strong> <span>${recalls}</span></p>
+
+            <p><strong>Recommendation:</strong> <span>Drop off vehicle for the day to complete recalls</span></p>
+
+            <p><strong>Scheduled Appointment:</strong> <span>${formattedDate}</span></p>
+
+          `;
+
+          serviceData[type] = { ...data, note: noteContent.textContent, name, phone, email, address, year, make, model, mileage, vin, recalls, datetime };
+
+        }
+
+      }
+
+
+
+      const popup = document.getElementById('notePopup');
+
+      const content = document.getElementById('noteContent');
+
+      const overlay = document.getElementById('overlay');
+
+      if (popup && content && overlay) {
+
+        content.innerHTML = '';
+
+        content.appendChild(noteContent);
+
+        popup.style.display = 'block';
+
+        overlay.style.display = 'block';
+
+        localStorage.setItem('serviceData', JSON.stringify(serviceData));
+
+      }
+
+    }
+
+
+
+    function copyNote() {
+
+      const content = document.getElementById('noteContent').textContent;
+
+      navigator.clipboard.writeText(content).then(() => {
+
+        alert('Note copied to clipboard!');
+
+      }).catch(err => {
+
+        console.error('Failed to copy note:', err);
+
+        alert('Failed to copy note. Please try again.');
+
+      });
+
+    }
+
+
+
+    function closePopup() {
+
+      const popup = document.getElementById('notePopup');
+
+      const overlay = document.getElementById('overlay');
+
+      if (popup && overlay) {
+
+        popup.style.display = 'none';
+
+        overlay.style.display = 'none';
+
+      }
+
+    }
+
+
+
+    function showObjectionPopup(id) {
+
+      document.querySelectorAll('.objection-popup').forEach(popup => {
+
+        popup.style.display = 'none';
+
+      });
+
+      const popup = document.getElementById(id);
+
+      if (popup) {
+
+        popup.style.display = 'block';
+
+      }
+
+    }
+
+
+
+    function closeObjectionPopup(id) {
+
+      const popup = document.getElementById(id);
+
+      if (popup) {
+
+        popup.style.display = 'none';
+
+      }
+
+    }
+
+  </script>
+
+</body>
+
+</html>
