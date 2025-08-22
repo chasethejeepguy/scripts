@@ -1023,6 +1023,16 @@
 
   </style>
 
+  <script>
+    // Early global fallbacks to prevent onclick ReferenceError before main script loads
+    window.showSection = window.showSection || function(){};
+    window.showSalesSubsection = window.showSalesSubsection || function(){};
+    window.showNewSubsection = window.showNewSubsection || function(){};
+    window.showPreownedSubsection = window.showPreownedSubsection || function(){};
+    window.showTradeInOption = window.showTradeInOption || function(){};
+    window.showPreownedTradeInOption = window.showPreownedTradeInOption || function(){};
+  </script>
+
 </head>
 
 <body>
