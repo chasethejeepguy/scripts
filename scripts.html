@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Hutchinson Auto Group BDC Inbound Call Scripts</title>
+  <title>Auffenberg Automotive Group BDC Inbound Call Scripts</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
@@ -1192,7 +1192,7 @@
 
   <div class="container">
 
-    <h1>Hutchinson Auto Group BDC Inbound Call Scripts</h1>
+    <h1>Auffenberg Automotive Group BDC Inbound Call Scripts</h1>
 
 
 
@@ -1200,7 +1200,7 @@
 
       <h2>Intro</h2>
 
-      <p>It's a great day at Hutchinson Auto Group,<br>
+      <p>It's a great day at Auffenberg Automotive Group,<br>
 
       To be respectful of your time, are you looking for Sales, Service or Parts?</p>
 
@@ -2414,7 +2414,7 @@
 
       <h2>Service Department</h2>
 
-      <p>Thank you for calling Hutchinson Auto Group. Are you calling to check the status of a vehicle or to schedule an appointment?</p>
+      <p>Thank you for calling Auffenberg Automotive Group. Are you calling to check the status of a vehicle or to schedule an appointment?</p>
 
       <div class="buttons">
 
@@ -3116,13 +3116,13 @@
 
 
 
-      // Use relative URLs to match inbound file and avoid CORS issues
+      // Use absolute URLs for CSV sources
 
       const csvUrl = type === 'new' 
 
-        ? '/usedmacon/newfeed.csv' 
+        ? 'https://hattricks.online/new/2.csv' 
 
-        : '/usedmacon/usedfeed.csv';
+        : 'https://hattricks.online/preowned/2.csv';
 
 
 
