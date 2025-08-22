@@ -100,21 +100,6 @@
 
     }
 
-    .script-nav .outbound {
-
-      background: #bdc3c7;
-
-      color: #2c3e50;
-
-    }
-
-    .script-nav .outbound:hover {
-
-      background: #a1a7ad;
-
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-
-    }
 
     .objection-buttons {
 
@@ -1045,8 +1030,6 @@
 <div class="script-nav">
 
   <a href="/scripts/inbound/index.html" class="inbound">Inbound Scripts</a>
-
-  <a href="/scripts/outbound/index.html" class="outbound">Outbound Scripts</a>
 
 </div>
 
@@ -3752,7 +3735,7 @@
 
     // Show a top-level section (e.g., sales, service)
 
-    function showSection(id) {
+    window.showSection = function showSection(id) {
 
       hideAll();
 
@@ -3774,7 +3757,7 @@
 
     // Show sales subsections (new, preowned, sell)
 
-    function showSalesSubsection(id) {
+    window.showSalesSubsection = function showSalesSubsection(id) {
 
       hideSubsections(['new', 'preowned', 'sell']);
 
@@ -3796,7 +3779,7 @@
 
     // Show new subsections (has-stock, no-stock)
 
-    function showNewSubsection(id) {
+    window.showNewSubsection = function showNewSubsection(id) {
 
       hideSubsections(['has-stock', 'no-stock']);
 
@@ -3818,7 +3801,7 @@
 
     // Show preowned subsections (preowned-has-stock, preowned-no-stock)
 
-    function showPreownedSubsection(id) {
+    window.showPreownedSubsection = function showPreownedSubsection(id) {
 
       hideSubsections(['preowned-has-stock', 'preowned-no-stock']);
 
@@ -3840,7 +3823,7 @@
 
     // Show trade-in options (has-trade, no-trade)
 
-    function showTradeInOption(id) {
+    window.showTradeInOption = function showTradeInOption(id) {
 
       hideSubsections(['has-trade', 'no-trade']);
 
@@ -3862,7 +3845,7 @@
 
     // Show preowned trade-in options (preowned-has-trade, preowned-no-trade)
 
-    function showPreownedTradeInOption(id) {
+    window.showPreownedTradeInOption = function showPreownedTradeInOption(id) {
 
       hideSubsections(['preowned-has-trade', 'preowned-no-trade']);
 
